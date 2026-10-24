@@ -1,7 +1,34 @@
+import { QueryClientProvider } from '@tanstack/react-query'
+import type { QueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import type { ReactNode } from 'react'
+import { ActiveLocationProvider } from '../features/locations/ActiveLocationProvider'
 import { ThemeProvider } from '../features/preferences/ThemeProvider'
+import { WeatherDataSourceContext } from '../features/weather/WeatherDataSourceContext'
+import { createDataSource } from '../lib/api'
+import type { WeatherDataSource } from '../lib/api'
+import { readConfig } from '../lib/config/env'
+import { createQueryClient } from '../lib/query/queryClient'
 
-/** App-wide providers. Server-state (TanStack Query) is added in Phase 2. */
-export function Providers({ children }: { children: ReactNode }) {
-  return <ThemeProvider>{children}</ThemeProvider>
+export interface ProvidersProps {
+  children: ReactNode
+  /** Tests inject these; the app creates them from configuration. */
+  dataSource?: WeatherDataSource
+  queryClient?: QueryClient
+}
+
+/** App-wide providers: theme, server-state cache, the configured data source, active location. */
+export function Providers({ children, dataSource, queryClient }: ProvidersProps) {
+  const [source] = useState(() => dataSource ?? createDataSource(readConfig()))
+  const [client] = useState(() => queryClient ?? createQueryClient())
+
+  return (
+    <ThemeProvider>
+      <QueryClientProvider client={client}>
+        <WeatherDataSourceContext.Provider value={source}>
+          <ActiveLocationProvider>{children}</ActiveLocationProvider>
+        </WeatherDataSourceContext.Provider>
+      </QueryClientProvider>
+    </ThemeProvider>
+  )
 }

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
@@ -25,7 +25,8 @@ describe('routes', () => {
   ])('renders a placeholder page at %s', async (path, heading) => {
     renderAt(path)
     expect(await screen.findByRole('heading', { level: 1, name: heading })).toBeInTheDocument()
-    expect(document.title).toBe(heading === 'Overview' ? 'Overview · Atmos' : `${heading} · Atmos`)
+    // The title is set in an effect, which can run just after the heading first appears.
+    await waitFor(() => expect(document.title).toBe(`${heading} · Atmos`))
   })
 
   it('renders a not-found state for unknown paths inside the shell', async () => {

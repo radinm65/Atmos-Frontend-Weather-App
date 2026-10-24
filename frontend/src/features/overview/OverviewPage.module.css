@@ -1,0 +1,8 @@
+.page {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.heading {
+  font-size: var(--text-2xl);
+}

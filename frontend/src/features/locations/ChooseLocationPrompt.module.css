@@ -1,0 +1,28 @@
+.prompt {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  text-align: center;
+}
+
+.icon {
+  color: var(--color-accent);
+}
+
+.title {
+  font-size: var(--text-xl);
+}
+
+.text {
+  max-width: 40ch;
+  color: var(--color-text-muted);
+}
+
+.search {
+  width: min(28rem, 100%);
+  text-align: left;
+}

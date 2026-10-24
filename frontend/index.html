@@ -1,10 +1,34 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <meta
+      name="description"
+      content="Atmos is a weather app with cinematic photography and a clear, data-rich dashboard."
+    />
+    <title>Atmos</title>
+    <script>
+      // Apply the theme before first paint to avoid a flash of the wrong theme (OPEN_DECISIONS D-02).
+      // Keep in sync with src/features/preferences/theme.ts (key "atmos:theme:v1").
+      ;(function () {
+        var theme = 'dark'
+        try {
+          var stored = JSON.parse(window.localStorage.getItem('atmos:theme:v1'))
+          if (stored === 'light' || stored === 'dark') {
+            theme = stored
+          } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+            theme = 'light'
+          }
+        } catch (e) {
+          try {
+            if (window.matchMedia('(prefers-color-scheme: light)').matches) theme = 'light'
+          } catch (e2) {}
+        }
+        document.documentElement.setAttribute('data-theme', theme)
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

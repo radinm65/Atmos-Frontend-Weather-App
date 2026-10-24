@@ -1,0 +1,16 @@
+.footer {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 768px) {
+  /* Leave room for the fixed bottom tab bar. */
+  .footer {
+    padding-bottom: calc(var(--header-height) + var(--space-4));
+  }
+}

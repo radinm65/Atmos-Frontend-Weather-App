@@ -1,0 +1,66 @@
+.picker {
+  position: relative;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-elevated);
+  color: var(--color-text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.trigger:hover {
+  border-color: var(--color-accent);
+}
+
+.triggerText {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: var(--space-4);
+  width: min(28rem, calc(100vw - 2 * var(--space-4)));
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.link {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-target);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .triggerText {
+    max-width: 7rem;
+  }
+
+  /* Anchor to the viewport so the panel never overflows the screen edge. */
+  .panel {
+    position: fixed;
+    top: var(--header-height);
+    right: var(--space-4);
+    left: var(--space-4);
+    width: auto;
+  }
+}

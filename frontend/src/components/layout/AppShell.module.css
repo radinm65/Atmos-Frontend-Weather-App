@@ -90,20 +90,6 @@
   margin-left: auto;
 }
 
-.location {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: var(--touch-target);
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
-  text-decoration: none;
-}
-
-.location:hover {
-  color: var(--color-text);
-}
-
 .main {
   flex: 1;
   width: 100%;
@@ -143,7 +129,7 @@
     min-width: 0;
   }
 
-  /* Five tabs fit the bottom bar; Locations is reached from the header location chip. */
+  /* Five tabs fit the bottom bar; Locations is reached from the header location picker. */
   .desktopOnly {
     display: none;
   }
@@ -162,14 +148,8 @@
     box-shadow: inset 0 2px 0 var(--color-accent);
   }
 
+  /* The footer, not main, clears the fixed tab bar. */
   .main {
-    padding-bottom: calc(var(--header-height) + var(--space-8));
-  }
-
-  .location span {
-    max-width: 9rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    padding-bottom: var(--space-8);
   }
 }

@@ -1,18 +1,7 @@
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
-import { Providers } from './providers'
-import { routes } from './router'
-
-function renderAt(path: string) {
-  const router = createMemoryRouter(routes, { initialEntries: [path] })
-  return render(
-    <Providers>
-      <RouterProvider router={router} />
-    </Providers>,
-  )
-}
+import { renderApp } from '../test/render'
 
 describe('routes', () => {
   it.each([
@@ -22,15 +11,15 @@ describe('routes', () => {
     ['/map', 'Map'],
     ['/assistant', 'Assistant'],
     ['/locations', 'Locations'],
-  ])('renders a placeholder page at %s', async (path, heading) => {
-    renderAt(path)
+  ])('renders a page at %s', async (path, heading) => {
+    renderApp(path)
     expect(await screen.findByRole('heading', { level: 1, name: heading })).toBeInTheDocument()
     // The title is set in an effect, which can run just after the heading first appears.
     await waitFor(() => expect(document.title).toBe(`${heading} · Atmos`))
   })
 
   it('renders a not-found state for unknown paths inside the shell', async () => {
-    renderAt('/nope')
+    renderApp('/nope')
     expect(await screen.findByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
     expect(screen.getByRole('navigation', { name: 'Main' })).toBeInTheDocument()
   })
@@ -38,7 +27,7 @@ describe('routes', () => {
 
 describe('app shell', () => {
   it('links to every route and marks the active one', async () => {
-    renderAt('/forecast')
+    renderApp('/forecast')
     const nav = await screen.findByRole('navigation', { name: 'Main' })
     for (const name of ['Overview', 'Forecast', 'Compare', 'Map', 'Assistant', 'Locations']) {
       expect(nav).toHaveTextContent(name)
@@ -48,28 +37,37 @@ describe('app shell', () => {
   })
 
   it('navigates between routes', async () => {
-    renderAt('/')
+    renderApp('/')
     await userEvent.click(await screen.findByRole('link', { name: 'Compare' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Compare' })).toBeInTheDocument()
   })
 
-  it('keeps Locations reachable from the header chip, and out of the compact tab bar', async () => {
-    renderAt('/')
-    const chip = await screen.findByRole('link', { name: 'No location selected' })
-    expect(chip).toHaveAttribute('href', '/locations')
-    const locationsTab = within(screen.getByRole('navigation', { name: 'Main' })).getByRole(
+  it('keeps Locations out of the compact tab bar but reachable from the location picker', async () => {
+    renderApp('/')
+    const locationsTab = within(await screen.findByRole('navigation', { name: 'Main' })).getByRole(
       'link',
       { name: 'Locations' },
     )
     expect(locationsTab.closest('li')?.className).toContain('desktopOnly')
+
+    await userEvent.click(screen.getByRole('button', { name: /choose location/i }))
+    expect(screen.getByRole('link', { name: 'Saved locations' })).toHaveAttribute(
+      'href',
+      '/locations',
+    )
   })
 
-  it('offers a skip link and a theme toggle', async () => {
-    renderAt('/')
+  it('offers a skip link, a theme toggle and data attribution', async () => {
+    renderApp('/')
     expect(await screen.findByRole('link', { name: 'Skip to main content' })).toHaveAttribute(
       'href',
       '#main-content',
     )
     expect(screen.getByRole('button', { name: /switch to .* theme/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Open-Meteo.com' })).toHaveAttribute(
+      'href',
+      'https://open-meteo.com/',
+    )
+    expect(screen.getByRole('link', { name: 'GeoNames' })).toBeInTheDocument()
   })
 })

@@ -11,9 +11,16 @@ export interface Location {
   timezone?: string
 }
 
+/** Region and country, e.g. "State of Berlin, Germany". Empty when neither is known. */
+export function describeLocationDetail(location: Location): string {
+  return [location.region, location.country]
+    .filter((part, index, all): part is string => Boolean(part) && all.indexOf(part) === index)
+    .filter((part) => part !== location.name)
+    .join(', ')
+}
+
 /** One-line label that tells similarly named places apart, e.g. "Berlin, State of Berlin, Germany". */
 export function describeLocation(location: Location): string {
-  return [location.name, location.region, location.country]
-    .filter((part, index, all): part is string => Boolean(part) && all.indexOf(part) === index)
-    .join(', ')
+  const detail = describeLocationDetail(location)
+  return detail ? `${location.name}, ${detail}` : location.name
 }

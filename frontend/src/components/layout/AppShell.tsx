@@ -1,8 +1,9 @@
-import { MapPin } from 'lucide-react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 import { NAV_ITEMS } from '../../app/navigation'
+import { LocationPicker } from '../../features/locations/LocationPicker'
 import { ThemeToggle } from '../../features/preferences/ThemeToggle'
 import styles from './AppShell.module.css'
+import { SiteFooter } from './SiteFooter'
 
 export function AppShell() {
   return (
@@ -39,11 +40,7 @@ export function AppShell() {
           </nav>
 
           <div className={styles.controls}>
-            {/* Links to saved locations for now; becomes the location picker in Phase 2. */}
-            <Link to="/locations" className={styles.location}>
-              <MapPin size={16} aria-hidden="true" />
-              <span>No location selected</span>
-            </Link>
+            <LocationPicker />
             <ThemeToggle />
           </div>
         </div>
@@ -52,6 +49,8 @@ export function AppShell() {
       <main id="main-content" className={styles.main} tabIndex={-1}>
         <Outlet />
       </main>
+
+      <SiteFooter />
     </div>
   )
 }

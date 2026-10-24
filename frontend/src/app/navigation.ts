@@ -16,6 +16,6 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { path: '/compare', label: 'Compare', icon: Columns2, inTabBar: true },
   { path: '/map', label: 'Map', icon: Map, inTabBar: true },
   { path: '/assistant', label: 'Assistant', icon: Sparkles, inTabBar: true },
-  // On compact screens, Locations is opened from the location chip in the header.
+  // On compact screens, Locations is opened from the location picker in the header.
   { path: '/locations', label: 'Locations', icon: Bookmark, inTabBar: false },
 ]

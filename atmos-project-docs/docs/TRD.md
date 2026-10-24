@@ -148,6 +148,8 @@ WeatherAPI.com is a candidate for the initial implementation because the propose
 
 Never assume that a provider's free tier is unlimited or that all features are free.
 
+**Phase 0 finding (2026-10-24, pending owner confirmation):** Open-Meteo is the recommended provider. WeatherAPI.com's free plan has only a 3-day forecast and needs a key. Open-Meteo is keyless, returns up to 16 forecast days, and allows browser calls (CORS `*`, tested). Its free API is non-commercial only (no ads or subscriptions), requires CC BY 4.0 attribution and GeoNames credit for geocoding, and is limited to 600/min, 5,000/h, 10,000/day. Evidence, links, and residual risks: `docs/PROVIDER_VALIDATION.md`. This TRD section stays "proposed" until D-05 and D-06 are marked Decided in `OPEN_DECISIONS.md`.
+
 **Key handling:** any key used directly from the browser is public (including `VITE_*` variables), so BR-11 is only satisfied by a keyless provider, a provider-approved restricted key, or by routing weather calls through the same server/serverless layer as the assistant. Decide this in Phase 0 (OPEN_DECISIONS D-05, D-06).
 
 ## 6. Map architecture
@@ -160,6 +162,10 @@ Never assume that a provider's free tier is unlimited or that all features are f
 - Gracefully handle tile and overlay failures.
 - If a provider's terms are unsuitable for public deployment, choose another provider rather than ignoring the terms.
 
+**Phase 0 findings (pending owner confirmation; see `docs/PROVIDER_VALIDATION.md` §2–3):**
+- Base tiles: OSM standard tiles are permitted for public sites with visible attribution and a valid Referer, no prefetching, no SLA, and a right to block heavy use. Keep the tile URL in one config module so it can be swapped.
+- Overlay: RainViewer past-radar is the candidate. Its API was tested (CORS `*`, past frames only, no nowcast), but its terms ("personal and educational use") could not be read from the primary source, so eligibility of a public portfolio is **unverified**. Cap Leaflet native zoom at 7 and show attribution. Confirm the terms first in Phase 5; the fallback is OpenWeather tiles through a caching proxy.
+
 ## 7. AI assistant architecture
 
 - Keep a provider-neutral assistant service interface.
@@ -170,6 +176,7 @@ Never assume that a provider's free tier is unlimited or that all features are f
 - Handle provider errors and unavailable credentials without breaking the rest of the app.
 - The developer's paid Claude chat plan may help author code, but it must not be treated as runtime API access for the deployed app. Runtime AI provider and billing/access need a separate decision.
 - If live AI is not configured during early development, use an explicit disabled/configuration state; do not fake an AI response and present it as real.
+- Phase 0 recommendation (pending D-14): ship the assistant disabled by default until the owner has an API account, a monthly spend cap, and per-IP rate limiting on the endpoint. See `docs/PROVIDER_VALIDATION.md` §4.
 
 ## 8. Local persistence
 

@@ -29,6 +29,7 @@ Read these files before implementation:
 6. `docs/IMPLEMENTATION_PLAN.md` — phased delivery plan and gates
 7. `docs/OPEN_DECISIONS.md` — decisions still open, proposed defaults, and owner-only prerequisites
 8. `docs/CLAUDE_START_PROMPT.md` — prompt for the first coding session
+9. `docs/PROVIDER_VALIDATION.md` — Phase 0 findings on weather, map, overlay, AI and deployment providers
 
 `CLAUDE.md` (repo root) is the short project memory that Claude Code loads automatically; it points back to these docs.
 

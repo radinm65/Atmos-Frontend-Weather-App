@@ -80,13 +80,13 @@ Exit criteria:
 
 **Goal:** Deliver the main polished weather pages.
 
-Tasks:
-- Build the cinematic overview hero.
-- Add key weather metrics and forecast highlights.
-- Build detailed hourly and daily forecast views.
-- Add charts where they materially help comprehension.
-- Validate both themes and mobile layouts.
-- Add the photography scene mapping and licensed, optimized images per `DESIGN_SPEC.md` §9, with `docs/CREDITS.md`.
+Tasks (the owner wants this phase to feel beautiful and interactive, so it is worked as small steps with a commit each; see `DESIGN_SPEC.md` §9a):
+- **3a — Visual foundation:** final fonts (D-04), refined tokens, and motion rules.
+- **3b — Sky engine:** a lazily loaded, procedural sky scene driven by local time, sunrise/sunset and condition (sun/moon arc, stars, clouds, rain, snow, fog, lightning), with reduced-motion and tab-hidden handling. Add sunrise/sunset to the data layer.
+- **3c — Overview hero:** the sky as the hero with current conditions on top, a time scrubber over the hourly forecast that drives the sky, key metric groups and forecast highlights.
+- **3d — Forecast views:** polished hourly and daily views, with charts only where they help comprehension (Recharts, lazily loaded).
+- **3e — Polish and validation:** both themes, mobile layouts, accessibility checks, and stable layouts while loading.
+- Photography is optional (D-13 not needed); no images ship unless the owner adds them.
 
 Exit criteria:
 - Overview and forecast use real provider data.

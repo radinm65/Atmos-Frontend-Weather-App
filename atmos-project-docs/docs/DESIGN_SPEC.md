@@ -6,7 +6,7 @@
 
 ## 1. Design direction
 
-- **Style:** Cinematic Photography
+- **Style:** Cinematic Sky. The owner changed this from "Cinematic Photography" on 2026-10-24: the hero is a live, interactive, procedurally drawn sky (see §9a). Photography is optional and no longer blocks any phase.
 - **Layout:** Hybrid — cinematic hero area plus a structured, information-rich dashboard
 - **Themes:** Light and dark
 - **Product feel:** Editorial, atmospheric, premium, calm, and data-aware
@@ -128,9 +128,20 @@ Define these in `tokens.css` alongside color. They are not theme-specific unless
 
 Use content-driven breakpoints. A desktop-first CSS workflow is acceptable, but every page must be validated at mobile widths as well. Avoid hard-coded widths that cause overflow. The 768px breakpoint may be used as an initial tablet/mobile boundary, then refined from real layouts.
 
-## 9. Photography requirements
+## 9a. Sky scene (primary visual, owner decision 2026-10-24)
 
-The visual identity depends on photography, so the asset plan is part of the spec. The source is an open decision (OPEN_DECISIONS D-13); these requirements apply whichever source is chosen.
+The hero and page backdrop are a live sky drawn in code (SVG/CSS, and canvas only for particles). It is the app's main visual identity and must feel alive without hiding information.
+
+- **Driven by data, not decoration:** time of day and sun/moon position come from the location's real local time and sunrise/sunset; the sky palette follows the sun's height (night, dawn, day, dusk); clouds, rain, snow, fog and lightning follow the normalized `ConditionCategory`. Unknown conditions show a calm neutral sky, never a guessed one.
+- **Interactive:** a time scrubber moves through the available hourly forecast and the sky, the temperature and the conditions update with it; light pointer/tilt parallax; hover and press feedback on controls. Interaction is optional: everything is also available as plain text.
+- **Honest in every data mode:** the scene reflects the report's own time. In snapshot mode it shows the recorded moment and the "Recorded snapshot" label stays visible; it must never imply live conditions.
+- **Independent of the UI theme:** light and dark theme change surfaces and text; the sky has its own palettes. Text over the sky always sits on a scrim or surface that keeps 4.5:1 contrast.
+- **Motion and performance:** respect `prefers-reduced-motion` (static sky, no particles, scrubber still works). Pause animation when the tab is hidden, cap particle counts, target 60 fps on a mid-range phone, and keep the scene code in a lazily loaded chunk with no photo assets.
+- **Accessibility:** the scene is decorative (`aria-hidden`); the condition, temperature and time are always stated in text.
+
+## 9. Photography requirements (optional)
+
+Photography is no longer the primary visual (see §9a). These rules apply only if photos are added later; the source is OPEN_DECISIONS D-13.
 
 - **Coverage:** day and night variants for clear, partly cloudy, overcast, rain, thunderstorm, snow, and fog/mist, plus one neutral fallback used when the condition is unknown or an image fails.
 - **Mapping:** one module maps normalized condition + day/night to a scene. Components never choose images ad hoc.

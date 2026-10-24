@@ -40,7 +40,9 @@ The app lives in `frontend/` (git root is the parent folder). Run these from `fr
 | `npm run test:watch` | Vitest watch mode |
 | e2e | Not set up yet (Playwright arrives in a later phase) |
 
-Source layout follows `docs/TRD.md` §2: `src/app`, `src/components/{ui,layout,feedback}`, `src/features/*`, `src/domain`, `src/lib/storage`, `src/styles`. Tests sit next to the code as `*.test.ts(x)`.
+Source layout follows `docs/TRD.md` §2: `src/app`, `src/components/{ui,layout,feedback}`, `src/features/*`, `src/domain`, `src/lib/{api,config,formatting,query,schemas,storage}`, `src/styles`. Tests sit next to the code as `*.test.ts(x)`; test-only helpers live in `src/test/` and `*/testFixtures.ts` and must never be imported by app code.
+
+Data layer (Phase 2): components never touch provider payloads. They use hooks (`useWeather`, `useLocationSearch`) that go through a `WeatherDataSource` (`src/lib/api/dataSource.ts`). `VITE_DATA_SOURCE=live|snapshot` picks the live Open-Meteo source or the recorded-snapshot source; both stay in the codebase (D-18).
 
 ## Completion report
 

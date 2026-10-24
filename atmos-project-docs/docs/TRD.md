@@ -129,6 +129,8 @@ export interface DailyForecast {
 
 Refine types after confirming the selected provider's actual schema. Validate external payloads at the API boundary.
 
+**Refined in Phase 2** (see `src/domain/`): `condition` is a `WeatherCondition` object (`category`, `label`, `code`) instead of a string; all instants are ISO-8601 UTC strings shown in the location's time zone; `CurrentWeather` and `HourlyForecast` carry `isDay`; `DailyForecast` adds `precipitationSum`; the location lives on a `WeatherReport` that also carries `timezone`, `fetchedAt`, and the data `source` (`live` or `snapshot`).
+
 ## 4. Data and API architecture
 
 - Keep provider-specific HTTP calls in a dedicated API module.

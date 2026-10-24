@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
@@ -50,6 +50,17 @@ describe('app shell', () => {
     renderAt('/')
     await userEvent.click(await screen.findByRole('link', { name: 'Compare' }))
     expect(await screen.findByRole('heading', { level: 1, name: 'Compare' })).toBeInTheDocument()
+  })
+
+  it('keeps Locations reachable from the header chip, and out of the compact tab bar', async () => {
+    renderAt('/')
+    const chip = await screen.findByRole('link', { name: 'No location selected' })
+    expect(chip).toHaveAttribute('href', '/locations')
+    const locationsTab = within(screen.getByRole('navigation', { name: 'Main' })).getByRole(
+      'link',
+      { name: 'Locations' },
+    )
+    expect(locationsTab.closest('li')?.className).toContain('desktopOnly')
   })
 
   it('offers a skip link and a theme toggle', async () => {

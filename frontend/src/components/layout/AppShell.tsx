@@ -1,5 +1,5 @@
 import { MapPin } from 'lucide-react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import { NAV_ITEMS } from '../../app/navigation'
 import { ThemeToggle } from '../../features/preferences/ThemeToggle'
 import styles from './AppShell.module.css'
@@ -19,8 +19,8 @@ export function AppShell() {
 
           <nav className={styles.nav} aria-label="Main">
             <ul className={styles.navList}>
-              {NAV_ITEMS.map(({ path, label, icon: Icon }) => (
-                <li key={path}>
+              {NAV_ITEMS.map(({ path, label, icon: Icon, inTabBar }) => (
+                <li key={path} className={inTabBar ? undefined : styles.desktopOnly}>
                   <NavLink
                     to={path}
                     end={path === '/'}
@@ -39,11 +39,11 @@ export function AppShell() {
           </nav>
 
           <div className={styles.controls}>
-            {/* Placeholder until city search lands in Phase 2. It is not interactive on purpose. */}
-            <p className={styles.location}>
+            {/* Links to saved locations for now; becomes the location picker in Phase 2. */}
+            <Link to="/locations" className={styles.location}>
               <MapPin size={16} aria-hidden="true" />
               <span>No location selected</span>
-            </p>
+            </Link>
             <ThemeToggle />
           </div>
         </div>

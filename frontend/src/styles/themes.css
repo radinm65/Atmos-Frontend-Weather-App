@@ -1,0 +1,39 @@
+/* Color tokens per theme. Values from docs/DESIGN_SPEC.md §3–4; the light palette is explicit, not inverted. */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: #080d18;
+  --color-surface: #101827;
+  --color-surface-elevated: #172235;
+  --color-border: #263449;
+  --color-text: #f4f7fc;
+  --color-text-muted: #a3b1c6;
+  --color-accent: #72d5ff;
+  --color-accent-strong: #399cff;
+  --color-on-accent: #080d18;
+  /* Form-control boundaries: 3:1+ on all dark surfaces. */
+  --color-border-strong: #5c6f8c;
+  --color-focus-ring: #72d5ff;
+  --color-success: #58d6a3;
+  --color-warning: #ffc66d;
+  --color-danger: #ff747e;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --color-bg: #f4f7fb;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-border: #dce4ef;
+  --color-text: #152033;
+  --color-text-muted: #58677d;
+  --color-accent: #0772aa;
+  --color-accent-strong: #05598f;
+  --color-on-accent: #ffffff;
+  /* Form-control boundaries: 3:1+ on bg and surface. */
+  --color-border-strong: #7c8ba1;
+  --color-focus-ring: #05598f;
+  --color-success: #137a50;
+  --color-warning: #8a5700;
+  --color-danger: #b42332;
+}

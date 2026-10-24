@@ -64,6 +64,7 @@ Tasks:
 - Implement typed location and weather domain models.
 - Implement city search and location selection.
 - Implement current weather and forecast queries.
+- Put provider access behind a `WeatherDataSource` interface with a live Open-Meteo implementation and a snapshot implementation, selected by configuration (TRD §4a, D-18). The snapshot source and recorder script may land at the end of this phase or as a short follow-up task, but the interface must exist from the start.
 - Normalize provider responses and handle missing fields.
 - Add unit-aware formatting utilities (metric by default; display-time conversion only).
 - Configure query keys, caching, retry behavior, and error mapping.
@@ -154,6 +155,7 @@ Tasks:
 - Review keyboard navigation, focus, contrast, reduced motion, and responsive layouts.
 - Check provider quotas, attribution, and deployment environment variables.
 - Verify production routing and build.
+- When the live-API trial ends, switch the deployment to snapshot mode by configuration (D-18), confirm snapshots are labeled as recorded data with their capture date, and confirm the live code path still builds and passes its tests.
 - Write the final README with setup, configuration, architecture, limitations, and screenshots.
 
 Exit criteria:

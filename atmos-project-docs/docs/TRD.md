@@ -142,13 +142,25 @@ Refine types after confirming the selected provider's actual schema. Validate ex
 - Units: domain values are metric; convert only at display time in one formatting module (OPEN_DECISIONS D-10).
 - Time: show times in the selected location's time zone and label it; never silently use the browser's zone for forecast data (D-11).
 
+## 4a. Data source modes: live API, then recorded snapshots (D-18)
+
+The owner wants the live API used during a trial, its data recorded, and a switch to static files afterwards **without deleting the API code**. Design for that from Phase 2:
+
+- **One transport interface** for provider data (for example `WeatherDataSource` with `searchLocations`, `getForecast`). Two implementations: `liveOpenMeteoSource` (HTTP) and `snapshotSource` (reads recorded JSON). Everything above it, including validation, normalization, query keys, formatting and components, is identical in both modes.
+- **Record the raw provider payloads**, not normalized output, so snapshots pass through the same validation and normalization as live responses. A change to the normalizer is then tested against real recorded data, and nothing downstream can tell which source it came from except the freshness label.
+- **Selection by configuration**, for example `VITE_DATA_SOURCE=live|snapshot` (a public, non-secret variable). Switching must be a config change, not a code deletion. Dead code paths stay covered by tests.
+- **Recorder:** a Node script (for example `frontend/scripts/record-snapshots.ts`) that fetches a curated list of cities and writes versioned JSON under `frontend/public/snapshots/`, including a manifest with the capture time, provider, and request parameters. Respect Open-Meteo's rate limits and the non-commercial terms. Whether the recorder runs by hand or on a schedule is an open sub-decision.
+- **Honesty rules** (AI_RULES §4, DESIGN_SPEC §10): in snapshot mode the UI must say, in text, that the data is a recorded snapshot from a stated date and time, treat it as stale by definition, and never present it as current conditions. Forecast times are in the past once the snapshot ages, so the UI must show the capture time prominently and must not highlight "now".
+- **Search in snapshot mode** can only cover recorded cities; the UI should say so instead of failing silently.
+- **Licence:** snapshots remain Open-Meteo data under CC BY 4.0. Keep the attribution (and GeoNames credit) visible in both modes.
+
 ## 5. Weather provider
 
 WeatherAPI.com is a candidate for the initial implementation because the proposed free tier may fit basic current-weather and short-range forecast needs. Before integrating, verify its current official plan limits, forecast horizon, allowed use, attribution requirements, rate limits, and required API key handling. If the requirements do not fit, compare against Open-Meteo and select based on documented evidence.
 
 Never assume that a provider's free tier is unlimited or that all features are free.
 
-**Phase 0 finding (2026-10-24, pending owner confirmation):** Open-Meteo is the recommended provider. WeatherAPI.com's free plan has only a 3-day forecast and needs a key. Open-Meteo is keyless, returns up to 16 forecast days, and allows browser calls (CORS `*`, tested). Its free API is non-commercial only (no ads or subscriptions), requires CC BY 4.0 attribution and GeoNames credit for geocoding, and is limited to 600/min, 5,000/h, 10,000/day. Evidence, links, and residual risks: `docs/PROVIDER_VALIDATION.md`. This TRD section stays "proposed" until D-05 and D-06 are marked Decided in `OPEN_DECISIONS.md`.
+**Phase 0 finding (2026-10-24; D-05 and D-06 decided by the owner):** Open-Meteo is the chosen provider. WeatherAPI.com's free plan has only a 3-day forecast and needs a key. Open-Meteo is keyless, returns up to 16 forecast days, and allows browser calls (CORS `*`, tested). Its free API is non-commercial only (no ads or subscriptions), requires CC BY 4.0 attribution and GeoNames credit for geocoding, and is limited to 600/min, 5,000/h, 10,000/day. Evidence, links, and residual risks: `docs/PROVIDER_VALIDATION.md`. The data layer must support the live-then-snapshot plan in §4a.
 
 **Key handling:** any key used directly from the browser is public (including `VITE_*` variables), so BR-11 is only satisfied by a keyless provider, a provider-approved restricted key, or by routing weather calls through the same server/serverless layer as the assistant. Decide this in Phase 0 (OPEN_DECISIONS D-05, D-06).
 
@@ -162,7 +174,7 @@ Never assume that a provider's free tier is unlimited or that all features are f
 - Gracefully handle tile and overlay failures.
 - If a provider's terms are unsuitable for public deployment, choose another provider rather than ignoring the terms.
 
-**Phase 0 findings (pending owner confirmation; see `docs/PROVIDER_VALIDATION.md` §2–3):**
+**Phase 0 findings (D-07 decided; D-08 decided with a terms gate; see `docs/PROVIDER_VALIDATION.md` §2–3):**
 - Base tiles: OSM standard tiles are permitted for public sites with visible attribution and a valid Referer, no prefetching, no SLA, and a right to block heavy use. Keep the tile URL in one config module so it can be swapped.
 - Overlay: RainViewer past-radar is the candidate. Its API was tested (CORS `*`, past frames only, no nowcast), but its terms ("personal and educational use") could not be read from the primary source, so eligibility of a public portfolio is **unverified**. Cap Leaflet native zoom at 7 and show attribution. Confirm the terms first in Phase 5; the fallback is OpenWeather tiles through a caching proxy.
 
@@ -176,7 +188,7 @@ Never assume that a provider's free tier is unlimited or that all features are f
 - Handle provider errors and unavailable credentials without breaking the rest of the app.
 - The developer's paid Claude chat plan may help author code, but it must not be treated as runtime API access for the deployed app. Runtime AI provider and billing/access need a separate decision.
 - If live AI is not configured during early development, use an explicit disabled/configuration state; do not fake an AI response and present it as real.
-- Phase 0 recommendation (pending D-14): ship the assistant disabled by default until the owner has an API account, a monthly spend cap, and per-IP rate limiting on the endpoint. See `docs/PROVIDER_VALIDATION.md` §4.
+- Phase 0 decision (D-14, owner): ship the assistant disabled by default until the owner has an API account, a monthly spend cap, and per-IP rate limiting on the endpoint. See `docs/PROVIDER_VALIDATION.md` §4.
 
 ## 8. Local persistence
 

@@ -73,15 +73,18 @@ Limits and terms change. Re-check the linked pages before the public release (Ph
 
 ## 6. First implementation scope (Phase 0 exit criterion)
 
-1. Phases 2–5 use Open-Meteo (weather and geocoding, direct from browser) and OSM tiles; no secrets are needed for them.
-2. The RainViewer overlay needs its terms confirmed first in Phase 5.
-3. The assistant ships disabled by default until the owner supplies an AI account and budget.
-4. No `.env` values are required until the assistant phase.
+Agreed with the owner on 2026-10-24:
 
-## 7. Open items for the owner
+1. Phases 2–5 use Open-Meteo (weather and geocoding, direct from browser) and OSM tiles; no secrets are needed for them (D-05, D-06, D-07).
+2. The RainViewer overlay needs its terms confirmed first in Phase 5; OpenWeather via a caching proxy is the fallback (D-08).
+3. The assistant is built but ships disabled by default until the owner supplies an AI account, budget, and rate limiting (D-14).
+4. The data layer supports a live API trial followed by recorded static snapshots, keeping the API code (D-18, TRD §4a).
+5. No `.env` values are required until the assistant phase.
 
-- Confirm Open-Meteo as the provider (D-05, D-06). Optionally email Open-Meteo to confirm a portfolio site qualifies as non-commercial.
-- Confirm OSM tiles for the MVP (D-07).
-- Accept RainViewer-first with a fallback, or choose a different overlay (D-08).
-- Decide whether AI ships live or gated, and set a budget if live (D-14).
-- Pick a deployment platform before Phase 6 (D-15).
+## 7. Still open for the owner
+
+- Open-Meteo portfolio eligibility is an inference. Optionally email `info@open-meteo.com` to confirm a no-ads, no-subscription portfolio qualifies as non-commercial.
+- Trial details for D-18: length, which cities to record and how often, whether search is limited to recorded cities afterwards, and whether the public deployment defaults to snapshot mode.
+- Runtime AI provider/model and budget (rest of D-14), before Phase 6.
+- Deployment platform (D-15), before Phase 6.
+- Photography source (D-13) and fonts (D-04), before Phase 3.

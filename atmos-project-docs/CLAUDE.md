@@ -25,7 +25,22 @@ Read the others on demand for the task at hand: `docs/BRD.md` (goals/scope), `do
 
 ## Commands
 
-Fill this in during Phase 1 once the scripts exist (dev, build, lint, typecheck, test, e2e). Keep it accurate.
+The app lives in `frontend/` (git root is the parent folder). Run these from `frontend/`; npm, Node >= 22.12 (`.nvmrc` = 22).
+
+| Command | What it does |
+|---|---|
+| `npm install` | Install dependencies |
+| `npm run dev` | Vite dev server (http://localhost:5173) |
+| `npm run build` | Type-check (`tsc -b`) then production build to `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | ESLint (ESLint 9: `eslint-plugin-jsx-a11y` does not support 10 yet) |
+| `npm run typecheck` | `tsc -b`, strict mode |
+| `npm run format` / `npm run format:check` | Prettier write / check |
+| `npm test` | Vitest + React Testing Library, single run |
+| `npm run test:watch` | Vitest watch mode |
+| e2e | Not set up yet (Playwright arrives in a later phase) |
+
+Source layout follows `docs/TRD.md` §2: `src/app`, `src/components/{ui,layout,feedback}`, `src/features/*`, `src/domain`, `src/lib/storage`, `src/styles`. Tests sit next to the code as `*.test.ts(x)`.
 
 ## Completion report
 

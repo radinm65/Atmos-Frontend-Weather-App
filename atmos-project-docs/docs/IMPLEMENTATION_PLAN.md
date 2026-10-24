@@ -1,0 +1,167 @@
+# Atmos Implementation Plan
+
+**Version:** 1.0  
+**Status:** Proposed execution sequence
+
+## Delivery rules
+
+- Work in small, reviewable phases.
+- Complete and verify each phase before moving on.
+- Do not integrate multiple external services at once.
+- Use real provider data for the actual weather flow; fixtures are allowed only in tests or clearly labeled development states.
+- Record provider decisions and known limitations in the docs.
+- Every phase ends with a review and a short completion report.
+- Open decisions live in `docs/OPEN_DECISIONS.md`. A phase may not start while a decision marked "needed by" that phase is still `Open`.
+
+## Session order
+
+1. **Session 1 — Phase 1** (`CLAUDE_START_PROMPT.md`). Needs no provider decisions.
+2. **Session 2 — Phase 0 (provider validation).** Research and documentation only: verify weather provider, key handling, map tiles, overlay, and AI approach against official pages; update `TRD.md` and `OPEN_DECISIONS.md`. No integration code. Must finish before Phase 2. The owner then signs up for any chosen provider.
+3. **Sessions 3+ — Phases 2 to 7**, one phase per session, in order. Photography (D-13) must be sourced before Phase 3.
+
+## Phase 0 — Repository and provider validation
+
+**Goal:** Confirm the implementation environment and avoid building against unsuitable service assumptions.
+
+Tasks:
+- Inspect repository state and current branch before making changes.
+- Confirm Node.js/package manager versions and existing tooling.
+- Verify current official weather-provider free-tier limits, forecast horizon, attribution, and public-use terms.
+- Verify map tile provider policy and weather-overlay API compatibility.
+- Decide whether the AI assistant is live in the first public deployment or initially gated behind configuration.
+- Update `TRD.md` with the verified choices.
+
+Exit criteria:
+- Provider decisions have official documentation links.
+- No unresolved licensing or secret-handling issue is being ignored.
+- The first implementation scope is agreed.
+
+## Phase 1 — App foundation
+
+**Goal:** Establish a clean, testable application shell.
+
+Tasks:
+- Create or verify the React + TypeScript + Vite setup.
+- Configure linting, formatting, and tests.
+- Add the app shell and route structure.
+- Add global tokens, light/dark theme foundations, typography, and responsive layout rules.
+- Add shared UI primitives and common loading/error/empty states.
+- Add a small validated `lib/storage` helper (used first for the theme; Phase 4 extends it with versioning for locations and preferences).
+- Add `.env.example` and ensure real environment files are ignored.
+- Fill in the Commands section of `CLAUDE.md`.
+
+Exit criteria:
+- App starts locally.
+- All planned routes render an intentional placeholder/shell.
+- Theme switching works and persists locally.
+- Lint, type check, tests, and production build pass.
+
+## Phase 2 — Weather data foundation
+
+**Goal:** Connect one weather provider through a normalized data layer.
+
+Tasks:
+- Implement typed location and weather domain models.
+- Implement city search and location selection.
+- Implement current weather and forecast queries.
+- Normalize provider responses and handle missing fields.
+- Add unit-aware formatting utilities (metric by default; display-time conversion only).
+- Configure query keys, caching, retry behavior, and error mapping.
+- Add attribution and data freshness labels.
+
+Exit criteria:
+- A user can search for a city and see current weather from the selected provider.
+- Forecast data uses consistent units and timestamps.
+- Missing values and API failures are handled.
+- Tests cover normalization and key error cases.
+
+## Phase 3 — Overview and forecast experience
+
+**Goal:** Deliver the main polished weather pages.
+
+Tasks:
+- Build the cinematic overview hero.
+- Add key weather metrics and forecast highlights.
+- Build detailed hourly and daily forecast views.
+- Add charts where they materially help comprehension.
+- Validate both themes and mobile layouts.
+- Add the photography scene mapping and licensed, optimized images per `DESIGN_SPEC.md` §9, with `docs/CREDITS.md`.
+
+Exit criteria:
+- Overview and forecast use real provider data.
+- No mock values appear as live weather.
+- Loading, error, empty, and stale-data states are complete.
+- Responsive and accessibility checks are performed.
+
+## Phase 4 — Local personalization and city comparison
+
+**Goal:** Make the app useful across multiple locations.
+
+Tasks:
+- Add save/remove city behavior.
+- Add versioned and validated local storage for locations and preferences.
+- Add the unit preference UI (°C/°F, km/h and mph) and apply it consistently, including charts.
+- Implement city comparison by reusing the existing data layer.
+- Ensure units and timestamps are comparable.
+
+Exit criteria:
+- Saved locations persist across reloads in the same browser.
+- Malformed storage data does not crash the app.
+- Users can compare at least two cities.
+- Comparison handles partial failures.
+
+## Phase 5 — Interactive map
+
+**Goal:** Provide a genuinely useful map experience.
+
+Tasks:
+- Integrate Leaflet and a compliant map tile provider.
+- Add location selection and selected-location details.
+- Integrate at least one verified weather overlay.
+- Add attribution and clear overlay controls.
+- Handle tile and overlay errors.
+
+Exit criteria:
+- Pan, zoom, and location selection work.
+- Overlay uses a real supported source.
+- Attribution and provider terms are respected.
+- The map remains usable on narrow screens.
+
+## Phase 6 — AI weather assistant
+
+**Goal:** Add contextual weather Q&A without compromising security.
+
+Tasks:
+- Select runtime AI provider and deployment approach.
+- Implement a server-side endpoint and environment configuration.
+- Define the assistant service interface.
+- Pass selected city and relevant forecast context.
+- Validate inputs, limit requests, and handle provider failures.
+- Add uncertainty and emergency-guidance boundaries to assistant behavior.
+
+Exit criteria:
+- Secrets are not exposed in the client.
+- Responses use supplied weather context and do not invent measurements.
+- Missing AI configuration is handled honestly.
+- Weather pages remain functional when AI is unavailable.
+
+## Phase 7 — Quality and release
+
+**Goal:** Prepare a credible public portfolio release.
+
+Tasks:
+- Complete key unit, component, integration, and end-to-end tests.
+- Review keyboard navigation, focus, contrast, reduced motion, and responsive layouts.
+- Check provider quotas, attribution, and deployment environment variables.
+- Verify production routing and build.
+- Write the final README with setup, configuration, architecture, limitations, and screenshots.
+
+Exit criteria:
+- All configured checks pass, or documented blockers remain.
+- No secrets are committed.
+- Provider terms and attribution are addressed.
+- Known limitations are documented honestly.
+
+## First coding session scope
+
+The first Claude session should do **Phase 1 only** (see "Session order" above for what follows), unless the repository already has a working foundation. It must inspect the existing repository before making changes, preserve useful existing code, and avoid building weather features prematurely.

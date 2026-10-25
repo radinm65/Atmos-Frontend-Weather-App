@@ -79,6 +79,7 @@
 }
 
 .bigIcon {
+  overflow: visible;
   display: grid;
   place-items: center;
   color: var(--color-text);

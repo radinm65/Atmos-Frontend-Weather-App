@@ -27,7 +27,7 @@ export function SunWidget({ report }: { report: WeatherReport }) {
 
   return (
     <Widget title="Sunrise & sunset" icon={Sunrise} note={note}>
-      <svg viewBox="0 0 200 104" className={styles.sunArc} aria-hidden="true">
+      <svg viewBox="-14 -26 228 140" className={styles.sunArc} aria-hidden="true">
         <defs>
           <linearGradient id="sun-arc-gradient" x1="0" x2="1" y1="0" y2="0">
             <stop offset="0%" stopColor="#ffb454" />

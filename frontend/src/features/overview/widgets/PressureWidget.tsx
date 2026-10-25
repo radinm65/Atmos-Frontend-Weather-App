@@ -35,7 +35,7 @@ export function PressureWidget({ report }: { report: WeatherReport }) {
           : `${describePressure(pressure)} pressure${trend ? `, ${TREND_TEXT[trend].toLowerCase()} over the next three hours` : ''}.`
       }
     >
-      <svg viewBox="0 0 120 76" className={styles.sunArc} aria-hidden="true">
+      <svg viewBox="-12 -14 144 100" className={styles.sunArc} aria-hidden="true">
         <path
           d={`M ${CENTER - RADIUS} ${CENTER} A ${RADIUS} ${RADIUS} 0 0 1 ${CENTER + RADIUS} ${CENTER}`}
           fill="none"

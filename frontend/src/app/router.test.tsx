@@ -1,6 +1,6 @@
 import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '../test/render'
 
 describe('routes', () => {
@@ -55,6 +55,37 @@ describe('app shell', () => {
       'href',
       '/locations',
     )
+  })
+
+  it('keeps the navigation inside the header on wide screens', async () => {
+    renderApp('/')
+    const nav = await screen.findByRole('navigation', { name: 'Main' })
+    expect(nav.closest('header')).not.toBeNull()
+  })
+
+  it('renders the tab bar directly in <body> on phones, outside the header and every wrapper', async () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((query: string) => ({
+        matches: query.includes('max-width'),
+        media: query,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+      })),
+    )
+    try {
+      renderApp('/')
+      const nav = await screen.findByRole('navigation', { name: 'Main' })
+      expect(nav.parentElement).toBe(document.body)
+      expect(nav.closest('header')).toBeNull()
+      // Still the same five tabs plus the hidden Locations entry, with the active one marked.
+      expect(within(nav).getByRole('link', { name: 'Overview' })).toHaveAttribute(
+        'aria-current',
+        'page',
+      )
+    } finally {
+      vi.unstubAllGlobals()
+    }
   })
 
   it('offers a skip link, a theme toggle and data attribution', async () => {

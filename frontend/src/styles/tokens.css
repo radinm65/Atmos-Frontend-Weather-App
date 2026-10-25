@@ -46,6 +46,22 @@
   --motion-base: 250ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
+  /* Blur stays at full strength across the tab row (so scrolled content is fully dissolved there),then eases out slowly below it. */
+  --shade-mask: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 1) 0%,
+    rgb(0 0 0 / 1) 10%,
+    rgb(0 0 0 / 1) 20%,
+    rgb(0 0 0 / 1) 30%,
+    rgb(0 0 0 / 1) 40%,
+    rgb(0 0 0 / 0.97) 50%,
+    rgb(0 0 0 / 0.85) 60%,
+    rgb(0 0 0 / 0.62) 70%,
+    rgb(0 0 0 / 0.35) 80%,
+    rgb(0 0 0 / 0.12) 90%,
+    rgb(0 0 0 / 0) 100%
+  );
+
   --touch-target: 2.75rem;
   --content-max: 76rem;
   --header-height: 4rem;

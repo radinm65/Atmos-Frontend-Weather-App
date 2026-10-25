@@ -2,11 +2,14 @@
   position: relative;
   display: grid;
   place-items: center;
+  /* Never clip the glow that spreads past the ring. */
+  overflow: visible;
 }
 
-.ring svg {
+.layer {
   position: absolute;
-  inset: 0;
+  overflow: visible;
+  pointer-events: none;
 }
 
 .center {

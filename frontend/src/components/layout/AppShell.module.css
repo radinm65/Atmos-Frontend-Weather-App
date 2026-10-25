@@ -2,6 +2,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* The header is fixed (out of flow), so reserve its height here. */
+  padding-top: calc(var(--header-height) + var(--space-3));
 }
 
 .skipLink {
@@ -26,8 +28,10 @@
  * fades down from the top edge so the brand, tabs and controls stay readable over any footage.
  */
 .headerWrap {
-  position: sticky;
+  position: fixed;
   top: 0;
+  right: 0;
+  left: 0;
   z-index: 20;
   padding: var(--space-3) var(--space-4) 0;
 }
@@ -35,7 +39,7 @@
 .headerWrap::before {
   content: '';
   position: absolute;
-  inset: 0 0 -3.25rem 0;
+  inset: 0 0 -5.5rem 0;
   z-index: -1;
   background: var(--header-shade);
   /*
@@ -43,10 +47,10 @@
    * fading to nothing, so there is no visible box or edge. (This is on a pseudo-element, so it
    * does not become the containing block for the fixed mobile tab bar.)
    */
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent);
-  mask-image: linear-gradient(to bottom, #000 45%, transparent);
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+  -webkit-mask-image: var(--shade-mask);
+  mask-image: var(--shade-mask);
   pointer-events: none;
 }
 
@@ -74,6 +78,7 @@
 }
 
 .logo {
+  overflow: visible;
   color: var(--color-warning);
   filter: drop-shadow(0 0 8px rgb(255 200 90 / 0.5));
 }
@@ -176,6 +181,8 @@
       var(--glass-shadow);
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    /* Own compositing layer so the bar stays put while the page scrolls underneath. */
+    transform: translateZ(0);
   }
 
   .navList {

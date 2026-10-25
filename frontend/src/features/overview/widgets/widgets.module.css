@@ -109,6 +109,7 @@
 .sunArc {
   width: 100%;
   max-width: 14rem;
+  overflow: visible;
 }
 
 .sunTimes {

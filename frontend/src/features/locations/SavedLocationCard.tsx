@@ -97,7 +97,7 @@ export function SavedLocationCard({ location, active, onView, onRemove }: SavedL
         {comparison.has(location.id) ? (
           <Button
             variant="ghost"
-            aria-label={`Remove ${location.name} from the comparison`}
+            aria-label={`Comparing. Remove ${location.name} from the comparison`}
             onClick={() => comparison.remove(location.id)}
           >
             <Check size={16} aria-hidden="true" />

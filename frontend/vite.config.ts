@@ -2,7 +2,7 @@ import react from '@vitejs/plugin-react'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { loadEnv } from 'vite'
 import type { Plugin } from 'vite'
-import { defineConfig } from 'vitest/config'
+import { configDefaults, defineConfig } from 'vitest/config'
 
 const ASSISTANT_PATH = '/api/assistant'
 type AssistantHandler = (
@@ -97,8 +97,31 @@ function assistantDevApi(mode: string): Plugin {
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [react(), assistantDevApi(mode)],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Libraries that change rarely get their own files, so a release that only changes the app
+        // code does not make returning visitors download them again.
+        codeSplitting: {
+          groups: [
+            {
+              name: 'motion',
+              test: /node_modules[\\/](motion|framer-motion|motion-dom|motion-utils)[\\/]/,
+            },
+            {
+              name: 'router',
+              test: /node_modules[\\/](react-router|react-router-dom|@remix-run)[\\/]/,
+            },
+            { name: 'data', test: /node_modules[\\/](@tanstack|zod)[\\/]/ },
+          ],
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
+    // The Playwright specs in e2e/ run with "npm run test:e2e", not here.
+    exclude: [...configDefaults.exclude, 'e2e/**'],
     setupFiles: ['./src/test/setup.ts'],
     testTimeout: 15000,
     css: { modules: { classNameStrategy: 'non-scoped' } },

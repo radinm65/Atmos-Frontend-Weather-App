@@ -139,7 +139,7 @@ export function PlaceDetails({ location, onOpenWeather }: PlaceDetailsProps) {
         {inComparison ? (
           <Button
             variant="ghost"
-            aria-label={`Remove ${location.name} from the comparison`}
+            aria-label={`Comparing. Remove ${location.name} from the comparison`}
             onClick={() => comparison.remove(location.id)}
           >
             Comparing

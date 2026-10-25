@@ -164,7 +164,7 @@ describe('Saved location cards and the comparison', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Compare Tokyo' }))
     expect(loadComparison().map((city) => city.id)).toEqual([tokyo.id])
     expect(
-      await screen.findByRole('button', { name: 'Remove Tokyo from the comparison' }),
+      await screen.findByRole('button', { name: 'Comparing. Remove Tokyo from the comparison' }),
     ).toBeInTheDocument()
   })
 })

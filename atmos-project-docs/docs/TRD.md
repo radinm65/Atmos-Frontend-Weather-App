@@ -216,7 +216,7 @@ Never assume that a provider's free tier is unlimited or that all features are f
 - Lazy-load routes; the map (Leaflet), charts (Recharts) and assistant routes must not be in the initial bundle.
 - Photography follows DESIGN_SPEC §9: responsive sizes, modern formats, explicit dimensions, placeholders.
 - Avoid layout shift while data loads (skeletons with stable dimensions).
-- Check bundle size in Phase 7 and record the result.
+- Check bundle size in Phase 7 and record the result. **Recorded 2026-10-25:** first-load JavaScript is 674 KB raw / 212 KB gzip (app 309 KB, Motion 153 KB, data libraries 119 KB, router 92 KB), split into long-lived vendor chunks in `vite.config.ts`. Heavy code loads only when needed: Recharts about 349 KB (101 KB gzip) on chart pages, Leaflet and the map page 166 KB (50 KB gzip) on `/map`, the assistant page 14 KB. No chunk is over 500 KB.
 
 ## 10. Environment variables
 

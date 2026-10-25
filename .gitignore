@@ -23,3 +23,7 @@ Thumbs.db
 
 # Local secrets for the assistant endpoint (Cloudflare Workers dev)
 .dev.vars
+
+# Playwright output
+frontend/test-results/
+frontend/playwright-report/

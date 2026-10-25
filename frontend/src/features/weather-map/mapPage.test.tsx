@@ -283,7 +283,7 @@ describe('Map page: choosing a place', () => {
     ).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: /^Compare Pin at/ }))
     expect(
-      screen.getByRole('button', { name: /^Remove Pin at .* from the comparison/ }),
+      screen.getByRole('button', { name: /^Comparing\. Remove Pin at .* from the comparison/ }),
     ).toBeInTheDocument()
   })
 })

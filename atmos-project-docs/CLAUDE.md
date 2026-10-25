@@ -40,7 +40,7 @@ The app lives in `frontend/` (git root is the parent folder). Run these from `fr
 | `npm run test:watch` | Vitest watch mode |
 | `npm run snapshots:record` | Records real Open-Meteo forecasts for the 12 cities in `scripts/snapshot-cities.json` into `public/snapshots/` (all-or-nothing; commit the result). Run a few times, and once right before release |
 | `npm run dev:snapshot` / `npm run build:snapshot` | Run or build in snapshot mode (`.env.snapshot`): serves the recorded files instead of calling the live API; search covers only recorded cities |
-| e2e | Not set up yet (Playwright arrives in a later phase) |
+| `npm run test:e2e` | Playwright end-to-end and axe accessibility tests against the snapshot build (uses the installed Chrome; 2 workers, since the pages are heavy) |
 
 npm on this machine needs the system proxy: see the Claude memory note, or set `HTTPS_PROXY=http://127.0.0.1:10808` for installs only.
 

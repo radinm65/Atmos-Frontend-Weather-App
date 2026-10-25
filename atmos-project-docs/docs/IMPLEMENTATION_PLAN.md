@@ -169,6 +169,8 @@ Exit criteria:
 - Provider terms and attribution are addressed.
 - Known limitations are documented honestly.
 
+**Built:** 25 Playwright tests (`npm run test:e2e`, against the snapshot build, no network): first visit, remembered place, units, saving, comparing, deep links and not-found, corrupted storage, the map and a map tap, the honest assistant-off state, skip link, keyboard-only search, and a phone layout with no sideways scroll. axe (WCAG 2.0/2.1 A and AA) runs on all six pages in both themes and found one real issue (a button whose accessible name did not start with its visible text), now fixed. A reduced-motion test confirms endless animations stop. 400+ unit and component tests. Snapshots re-recorded; bundle size recorded (TRD §9a); secrets scan clean; root `README.md`, `RELEASE_CHECKLIST.md` and a GitHub Actions workflow added (the workflow, the Cloudflare deployment and Safari/Firefox/iPhone have **not** been run or tried). Contrast over moving video is by eye only.
+
 ## First coding session scope
 
 The first Claude session should do **Phase 1 only** (see "Session order" above for what follows), unless the repository already has a working foundation. It must inspect the existing repository before making changes, preserve useful existing code, and avoid building weather features prematurely.

@@ -1,23 +1,27 @@
-import { useQuery } from '@tanstack/react-query'
+import { skipToken, useQueries, useQuery } from '@tanstack/react-query'
 import type { Location } from '../../domain/location'
 import { queryKeys } from '../../lib/query/keys'
-import { WEATHER_STALE_TIME_MS } from '../../lib/query/queryClient'
+import { weatherQueryOptions } from './weatherQueryOptions'
 import { useWeatherDataSource } from './WeatherDataSourceContext'
 
 /**
- * Current conditions and forecast for a location. Overview, forecast, and (later) comparison,
- * map details and assistant context all read through this one query. If a refresh fails after a
- * success, `data` is kept and `isError` is true, so callers can show it as stale.
+ * Current conditions and forecast for a location. Overview, forecast, comparison, saved places
+ * and (later) map details and assistant context all read through the same query definition. If a
+ * refresh fails after a success, `data` is kept and `isError` is true, so callers can show it as
+ * stale.
  */
 export function useWeather(location: Location | null) {
   const source = useWeatherDataSource()
+  const options = location ? weatherQueryOptions(source, location) : null
   return useQuery({
-    queryKey: queryKeys.weather(source.kind, location?.id ?? 'none'),
-    queryFn: ({ signal }) => {
-      if (!location) throw new Error('useWeather: query ran without a location')
-      return source.getWeather(location, { signal })
-    },
-    enabled: location !== null,
-    staleTime: WEATHER_STALE_TIME_MS,
+    queryKey: options?.queryKey ?? queryKeys.weather(source.kind, 'none'),
+    queryFn: options?.queryFn ?? skipToken,
+    staleTime: options?.staleTime,
   })
+}
+
+/** Weather for several places at once, each with its own loading and error state. */
+export function useWeatherQueries(locations: readonly Location[]) {
+  const source = useWeatherDataSource()
+  return useQueries({ queries: locations.map((location) => weatherQueryOptions(source, location)) })
 }

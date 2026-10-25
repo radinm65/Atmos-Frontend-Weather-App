@@ -5,6 +5,7 @@ import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { ActiveLocationProvider } from '../features/locations/ActiveLocationProvider'
 import { SavedLocationsProvider } from '../features/locations/SavedLocationsProvider'
+import { ComparisonProvider } from '../features/comparison/ComparisonProvider'
 import { PreferencesProvider } from '../features/preferences/PreferencesProvider'
 import { ThemeProvider } from '../features/preferences/ThemeProvider'
 import { WeatherDataSourceContext } from '../features/weather/WeatherDataSourceContext'
@@ -35,7 +36,9 @@ export function Providers({ children, dataSource, queryClient }: ProvidersProps)
           <WeatherDataSourceContext.Provider value={source}>
             <PreferencesProvider>
               <ActiveLocationProvider>
-                <SavedLocationsProvider>{children}</SavedLocationsProvider>
+                <SavedLocationsProvider>
+                  <ComparisonProvider>{children}</ComparisonProvider>
+                </SavedLocationsProvider>
               </ActiveLocationProvider>
             </PreferencesProvider>
           </WeatherDataSourceContext.Provider>

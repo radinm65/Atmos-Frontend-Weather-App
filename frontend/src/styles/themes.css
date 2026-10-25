@@ -65,6 +65,12 @@
   --chart-uv: #ffd85e;
   --chart-grid: rgb(255 255 255 / 0.14);
 
+  /* One colour per compared city. Lines also differ by dash pattern, so colour is never the only cue. */
+  --series-1: #ffb86b;
+  --series-2: #7fd0ff;
+  --series-3: #b8f2c9;
+  --series-4: #f5a3ff;
+
   /* Air quality bands. The band name is always shown too, so colour is never the only signal. */
   --aqi-good: #6ee7b7;
   --aqi-moderate: #fde047;
@@ -125,6 +131,11 @@
   --chart-wind: #1a6e43;
   --chart-uv: #94600a;
   --chart-grid: rgb(20 23 28 / 0.16);
+
+  --series-1: #b8520a;
+  --series-2: #0a5f92;
+  --series-3: #1a6e43;
+  --series-4: #9b2f8a;
 
   --aqi-good: #0f7a4d;
   --aqi-moderate: #8f6c00;

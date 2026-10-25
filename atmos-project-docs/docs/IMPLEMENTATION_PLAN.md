@@ -110,6 +110,8 @@ Exit criteria:
 - Users can compare at least two cities.
 - Comparison handles partial failures.
 
+**Built:** units menu and validated preferences; saved locations (cap, dedupe, lenient reads) with a live Locations page; comparison of 2 to 4 cities (D-16) on the same query definition and cache as the Overview (one request per city, no separate API path). Every city has its own loading and error state, so one failure never hides the rest; failed cities show as not available in the table and chart. The table marks highest and lowest with an arrow and a word, not colour alone, and the chart aligns cities by elapsed hours with each city's own local time in the tooltip. Compared cities persist under tmos:comparison:v1.
+
 ## Phase 5 — Interactive map
 
 **Goal:** Provide a genuinely useful map experience.

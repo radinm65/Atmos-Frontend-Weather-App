@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { ArrowRight, Trash2 } from 'lucide-react'
+import { ArrowRight, Check, GitCompareArrows, Trash2 } from 'lucide-react'
 import { GlassPanel } from '../../components/ui/GlassPanel'
 import { Button } from '../../components/ui/Button'
 import { IconButton } from '../../components/ui/IconButton'
@@ -8,6 +8,7 @@ import { describeLocationDetail } from '../../domain/location'
 import type { Location } from '../../domain/location'
 import { describeError } from '../../lib/api'
 import { formatTemperature, formatTime } from '../../lib/formatting'
+import { useComparison } from '../comparison/useComparison'
 import { useUnits } from '../preferences/useUnits'
 import { dailyForToday } from '../weather/selectors'
 import { useWeather } from '../weather/useWeather'
@@ -27,6 +28,7 @@ export interface SavedLocationCardProps {
  */
 export function SavedLocationCard({ location, active, onView, onRemove }: SavedLocationCardProps) {
   const units = useUnits()
+  const comparison = useComparison()
   const query = useWeather(location)
   const report = query.data
   const day = report ? dailyForToday(report) : null
@@ -87,10 +89,32 @@ export function SavedLocationCard({ location, active, onView, onRemove }: SavedL
         )}
       </div>
 
-      <Button variant={active ? 'secondary' : 'primary'} onClick={onView}>
-        {active ? 'Showing now' : 'View weather'}
-        <ArrowRight size={16} aria-hidden="true" />
-      </Button>
+      <div className={styles.actions}>
+        <Button variant={active ? 'secondary' : 'primary'} onClick={onView}>
+          {active ? 'Showing now' : 'View weather'}
+          <ArrowRight size={16} aria-hidden="true" />
+        </Button>
+        {comparison.has(location.id) ? (
+          <Button
+            variant="ghost"
+            aria-label={`Remove ${location.name} from the comparison`}
+            onClick={() => comparison.remove(location.id)}
+          >
+            <Check size={16} aria-hidden="true" />
+            Comparing
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            aria-label={`Compare ${location.name}`}
+            disabled={comparison.cities.length >= comparison.max}
+            onClick={() => comparison.add(location)}
+          >
+            <GitCompareArrows size={16} aria-hidden="true" />
+            Compare
+          </Button>
+        )}
+      </div>
     </GlassPanel>
   )
 }

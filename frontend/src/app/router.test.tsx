@@ -3,6 +3,9 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { renderApp } from '../test/render'
 
+// Leaflet needs real layout, which jsdom lacks; the map page is tested with a stand-in map.
+vi.mock('../features/weather-map/WeatherMap', () => ({ WeatherMap: () => <div /> }))
+
 describe('routes', () => {
   it.each([
     ['/', 'Overview'],

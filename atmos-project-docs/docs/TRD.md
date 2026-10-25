@@ -180,7 +180,7 @@ Never assume that a provider's free tier is unlimited or that all features are f
 
 **Phase 0 findings (D-07 decided; D-08 decided with a terms gate; see `docs/PROVIDER_VALIDATION.md` §2–3):**
 - Base tiles: OSM standard tiles are permitted for public sites with visible attribution and a valid Referer, no prefetching, no SLA, and a right to block heavy use. Keep the tile URL in one config module so it can be swapped.
-- Overlay: RainViewer past-radar is the candidate. Its API was tested (CORS `*`, past frames only, no nowcast), but its terms ("personal and educational use") could not be read from the primary source, so eligibility of a public portfolio is **unverified**. Cap Leaflet native zoom at 7 and show attribution. Confirm the terms first in Phase 5; the fallback is OpenWeather tiles through a caching proxy.
+- Overlay: RainViewer past-radar is the candidate. Its API was tested (CORS `*`, past frames only, no nowcast), but its terms ("personal and educational use") could not be read from the primary source, so eligibility of a public portfolio is **unverified**. Cap Leaflet native zoom at 7 and show attribution. **Phase 5:** the terms were confirmed on 2026-10-25 (personal and educational use fits a non-commercial portfolio; see PROVIDER_VALIDATION.md §3). Code lives in src/features/weather-map/: mapConfig.ts (base tiles), ainViewer.ts (validated client, tile URL, playback rules), mapController.ts (all imperative Leaflet), WeatherMap.tsx (thin shell). Hosting must not set a Referrer-Policy that removes the Referer, which OSM requires.
 
 ## 7. AI assistant architecture
 

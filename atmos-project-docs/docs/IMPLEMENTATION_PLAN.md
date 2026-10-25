@@ -110,7 +110,7 @@ Exit criteria:
 - Users can compare at least two cities.
 - Comparison handles partial failures.
 
-**Built:** units menu and validated preferences; saved locations (cap, dedupe, lenient reads) with a live Locations page; comparison of 2 to 4 cities (D-16) on the same query definition and cache as the Overview (one request per city, no separate API path). Every city has its own loading and error state, so one failure never hides the rest; failed cities show as not available in the table and chart. The table marks highest and lowest with an arrow and a word, not colour alone, and the chart aligns cities by elapsed hours with each city's own local time in the tooltip. Compared cities persist under tmos:comparison:v1.
+**Built:** units menu and validated preferences; saved locations (cap, dedupe, lenient reads) with a live Locations page; comparison of 2 to 4 cities (D-16) on the same query definition and cache as the Overview (one request per city, no separate API path). Every city has its own loading and error state, so one failure never hides the rest; failed cities show as not available in the table and chart. The table marks highest and lowest with an arrow and a word, not colour alone, and the chart aligns cities by elapsed hours with each city's own local time in the tooltip. Compared cities persist under `atmos:comparison:v1`.
 
 ## Phase 5 — Interactive map
 
@@ -128,6 +128,8 @@ Exit criteria:
 - Overlay uses a real supported source.
 - Attribution and provider terms are respected.
 - The map remains usable on narrow screens.
+
+**Built:** a lazy-loaded Leaflet map on OpenStreetMap tiles (dimmed in the dark theme), a RainViewer past-radar overlay with on/off, time slider, play/pause and strength controls, and visible attribution for both providers. Tap or click selects a place, search moves the map to a city, "Select map centre" gives keyboard users the same power, and saved places show as markers. The selected place shows its weather and can be opened in full, saved or compared. Open-Meteo has no reverse geocoding, so a tapped point is named by its coordinates (id pin:lat,lon). A radar outage, bad radar response, failed tiles or failed base tiles each show a message and never break the map.
 
 ## Phase 6 — AI weather assistant
 

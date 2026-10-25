@@ -1,0 +1,133 @@
+.map {
+  width: 100%;
+  height: 100%;
+  min-height: 20rem;
+  border-radius: inherit;
+  /* Leaflet panes use z-indexes up to 1000; keep them below the sticky header and tab bar. */
+  isolation: isolate;
+  background: var(--glass-bg-strong);
+  font-family: inherit;
+}
+
+.map:focus-visible {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: -3px;
+}
+
+/* The standard OSM tiles are bright; dim them in the dark theme so the radar stands out. */
+.baseTiles {
+  transition: filter var(--motion-base) ease;
+}
+
+:global([data-theme='dark']) .baseTiles {
+  filter: brightness(0.66) contrast(1.05) saturate(0.7);
+}
+
+:global([data-theme='light']) .baseTiles {
+  filter: saturate(0.85) brightness(0.96);
+}
+
+.radarTiles {
+  transition: opacity 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radarTiles,
+  .baseTiles {
+    transition: none;
+  }
+}
+
+/* Markers are drawn with CSS, so no marker image files are needed. */
+.markerSaved span,
+.markerSelected span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.markerSaved span {
+  background: var(--color-accent);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+}
+
+.markerSelected span {
+  background: var(--chart-temp);
+  border: 4px solid #fff;
+  box-shadow:
+    0 0 0 3px rgb(0 0 0 / 0.35),
+    0 4px 14px rgb(0 0 0 / 0.55);
+  animation: pulse 2.4s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow:
+      0 0 0 3px rgb(0 0 0 / 0.35),
+      0 0 0 0 rgb(255 184 107 / 0.7);
+  }
+  70%,
+  100% {
+    box-shadow:
+      0 0 0 3px rgb(0 0 0 / 0.35),
+      0 0 0 18px rgb(255 184 107 / 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markerSelected span {
+    animation: none;
+  }
+}
+
+/* Leaflet's own controls, restyled as glass. */
+.map :global(.leaflet-bar) {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+}
+
+.map :global(.leaflet-bar a) {
+  width: var(--touch-target);
+  height: var(--touch-target);
+  line-height: var(--touch-target);
+  background: var(--glass-bg-strong);
+  color: var(--color-text);
+  border-bottom-color: var(--color-border);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.map :global(.leaflet-bar a:hover),
+.map :global(.leaflet-bar a:focus-visible) {
+  background: var(--glass-bg-hover);
+  color: var(--color-text);
+}
+
+.map :global(.leaflet-bar a.leaflet-disabled) {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+.map :global(.leaflet-control-attribution) {
+  background: var(--glass-bg-strong);
+  color: var(--color-text-muted);
+  padding: 2px 8px;
+  border-top-left-radius: var(--radius-sm);
+  font-size: 0.7rem;
+}
+
+.map :global(.leaflet-control-attribution a) {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+.map :global(.leaflet-marker-icon:focus-visible) {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 3px;
+  border-radius: 50%;
+}

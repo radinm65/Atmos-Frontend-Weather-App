@@ -1,0 +1,76 @@
+.page {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.heading {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.02em;
+}
+
+.search {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+}
+
+.searchBox {
+  min-width: 0;
+}
+
+.centreButton {
+  justify-self: start;
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.mapFrame {
+  position: relative;
+  overflow: hidden;
+  height: min(70dvh, 34rem);
+  min-height: 20rem;
+  padding: 0;
+  border-radius: var(--radius-xl);
+}
+
+.mapNotice {
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: 2.25rem;
+  z-index: 800;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg-strong);
+  color: var(--color-warning);
+  font-size: var(--text-sm);
+  text-align: center;
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.side {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 60rem) {
+  .search {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+  }
+
+  .mapFrame {
+    height: clamp(32rem, 74dvh, 46rem);
+  }
+}

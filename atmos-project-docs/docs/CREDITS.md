@@ -31,3 +31,9 @@ Looping real-footage backgrounds, one per weather scene, in `frontend/public/bac
 ## Images
 
 No other images are used.
+
+## Map
+
+- Base map: © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, standard tile layer, shown on the map and in the radar panel.
+- Rain radar: [RainViewer](https://www.rainviewer.com/) past-radar tiles (personal and educational use; see `PROVIDER_VALIDATION.md` §3), shown on the map and in the radar panel.
+- Map library: [Leaflet](https://leafletjs.com) (BSD-2-Clause).

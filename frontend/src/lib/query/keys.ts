@@ -10,4 +10,6 @@ export const queryKeys = {
   weather: (source: DataSourceKind, locationId: string) => ['weather', source, locationId] as const,
   airQuality: (source: DataSourceKind, locationId: string) =>
     ['air-quality', source, locationId] as const,
+  /** Rain radar timeline. It is not tied to the weather data source (it is always RainViewer). */
+  radar: () => ['radar', 'rainviewer'] as const,
 }

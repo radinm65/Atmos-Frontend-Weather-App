@@ -12,4 +12,6 @@ export const queryKeys = {
     ['air-quality', source, locationId] as const,
   /** Rain radar timeline. It is not tied to the weather data source (it is always RainViewer). */
   radar: () => ['radar', 'rainviewer'] as const,
+  /** Whether the assistant endpoint exists and is switched on. */
+  assistantStatus: () => ['assistant', 'status'] as const,
 }

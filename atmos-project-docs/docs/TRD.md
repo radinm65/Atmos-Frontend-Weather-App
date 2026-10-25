@@ -192,6 +192,7 @@ Never assume that a provider's free tier is unlimited or that all features are f
 - Handle provider errors and unavailable credentials without breaking the rest of the app.
 - The developer's paid Claude chat plan may help author code, but it must not be treated as runtime API access for the deployed app. Runtime AI provider and billing/access need a separate decision.
 - If live AI is not configured during early development, use an explicit disabled/configuration state; do not fake an AI response and present it as real.
+- **Phase 6 (built):** `frontend/server/assistant/` holds the endpoint (`handler.ts`: web-standard `Request` to `Response`; `provider.ts`: provider interface plus the Anthropic implementation; `prompt.ts`: instructions; `rateLimit.ts`), `server/worker.ts` the Cloudflare entry, and `src/lib/assistant/contract.ts` the request/response schemas both sides share. The browser side is `src/features/assistant/` (`assistantApi.ts` service, `weatherContext.ts` forecast-to-text, `emergency.ts` fixed safety notice, `AssistantChat.tsx`). In `npm run dev` the same handler runs as a Vite middleware, with secrets read from `.env.local`.
 - Phase 0 decision (D-14, owner): ship the assistant disabled by default until the owner has an API account, a monthly spend cap, and per-IP rate limiting on the endpoint. See `docs/PROVIDER_VALIDATION.md` §4.
 
 ## 8. Local persistence

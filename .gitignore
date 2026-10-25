@@ -20,3 +20,6 @@ Thumbs.db
 
 # Claude Code local state
 .claude/
+
+# Local secrets for the assistant endpoint (Cloudflare Workers dev)
+.dev.vars

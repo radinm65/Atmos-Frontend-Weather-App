@@ -46,6 +46,8 @@ npm on this machine needs the system proxy: see the Claude memory note, or set `
 
 Source layout follows `docs/TRD.md` §2: `src/app`, `src/components/{ui,layout,feedback}`, `src/features/*`, `src/domain`, `src/lib/{api,config,formatting,query,schemas,storage}`, `src/styles`. Tests sit next to the code as `*.test.ts(x)`; test-only helpers live in `src/test/` and `*/testFixtures.ts` and must never be imported by app code.
 
+Assistant (Phase 6): the AI key lives only on the server. `frontend/server/assistant/` is the endpoint (`Request` to `Response`, runs inside `npm run dev` as a Vite middleware and in the Cloudflare Worker `server/worker.ts`); the browser calls `/api/assistant`. It is **off** unless `ASSISTANT_ENABLED=true` and `ANTHROPIC_API_KEY` are set in `frontend/.env.local` (git-ignored, no `VITE_` prefix). Never put a key in a `VITE_*` variable or in client code; never fake an answer when it is off.
+
 Data layer (Phase 2): components never touch provider payloads. They use hooks (`useWeather`, `useLocationSearch`) that go through a `WeatherDataSource` (`src/lib/api/dataSource.ts`). `VITE_DATA_SOURCE=live|snapshot` picks the live Open-Meteo source or the recorded-snapshot source; both stay in the codebase (D-18).
 
 ## Completion report

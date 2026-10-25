@@ -6,8 +6,11 @@ import { afterEach } from 'vitest'
 configure({ asyncUtilTimeout: 5000 })
 
 // jsdom does not implement media playback and logs "not implemented" for play()/pause().
-HTMLMediaElement.prototype.play = () => Promise.resolve()
-HTMLMediaElement.prototype.pause = () => undefined
+// (Server tests run in the node environment, which has no DOM at all.)
+if (typeof HTMLMediaElement !== 'undefined') {
+  HTMLMediaElement.prototype.play = () => Promise.resolve()
+  HTMLMediaElement.prototype.pause = () => undefined
+}
 
 // jsdom has no ResizeObserver.
 class NoopResizeObserver {
@@ -19,5 +22,5 @@ globalThis.ResizeObserver ??= NoopResizeObserver
 
 afterEach(() => {
   cleanup()
-  window.localStorage.clear()
+  if (typeof window !== 'undefined') window.localStorage.clear()
 })

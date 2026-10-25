@@ -23,6 +23,11 @@
   inherits: true;
   initial-value: #1a2650;
 }
+@property --sky-sun-core {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #fffdf0;
+}
 @property --sky-cloud {
   syntax: '<color>';
   inherits: true;

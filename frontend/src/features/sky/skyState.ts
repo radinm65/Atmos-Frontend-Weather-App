@@ -42,6 +42,8 @@ export interface SkyColors {
   bottom: string
   /** Colour of the glow around the sun or moon and along the horizon. */
   glow: string
+  /** Colour of the sun's disc: orange near the horizon, white high up. */
+  sunCore: string
   cloud: string
   cloudShade: string
   /** Silhouette hills at the bottom of the scene. */
@@ -81,8 +83,9 @@ const PALETTE: readonly Keyframe[] = [
   { altitude: -1, top: '#04060f', middle: '#080d22', bottom: '#101936', glow: '#1a2650' },
   { altitude: -0.5, top: '#070d26', middle: '#101c4a', bottom: '#233570', glow: '#32478c' },
   { altitude: -0.2, top: '#121a4a', middle: '#3a3d86', bottom: '#935d92', glow: '#e07a6c' },
-  { altitude: -0.04, top: '#26346f', middle: '#8a6a9c', bottom: '#f08a5d', glow: '#ffb067' },
-  { altitude: 0.1, top: '#3a68b0', middle: '#8cb0d8', bottom: '#ffd3a2', glow: '#ffd68c' },
+  { altitude: -0.04, top: '#26346f', middle: '#8a5f9c', bottom: '#f27d54', glow: '#ff8f4f' },
+  { altitude: 0.06, top: '#34579f', middle: '#b98aa6', bottom: '#ffa263', glow: '#ffb06a' },
+  { altitude: 0.18, top: '#3a68b0', middle: '#8cb0d8', bottom: '#ffd3a2', glow: '#ffd68c' },
   { altitude: 0.4, top: '#3a84d6', middle: '#77b3ea', bottom: '#bfe0f6', glow: '#fff0c4' },
   { altitude: 1, top: '#2874de', middle: '#58a4ef', bottom: '#a8d5fa', glow: '#fff7dc' },
 ]
@@ -227,12 +230,15 @@ export function computeSkyState(input: SkyInput): SkyState {
   cloud = desaturate(cloud, gloom * 0.6)
   const cloudShade = mix(cloud, '#1b2238', 0.45 + gloom * 0.3)
 
+  // Heavy cloud hides the sun and moon completely rather than leaving a grey disc behind.
+  const bodyCover = 1 - smoothstep(0.2, 0.55, gloom)
   const night = 1 - dayness
   const colors: SkyColors = {
     top: tone(base.top),
     middle: tone(base.middle),
     bottom: tone(base.bottom),
     glow: tone(base.glow),
+    sunCore: mix('#ffa24d', '#fffdf0', smoothstep(0, 0.4, altitude)),
     cloud: darken(cloud, gloom * 0.25 * dayness),
     cloudShade,
     hillFar: mix(tone(base.bottom), '#0a1020', 0.55 + night * 0.3),
@@ -249,12 +255,12 @@ export function computeSkyState(input: SkyInput): SkyState {
     sun: {
       x: sunX,
       y: Math.max(altitude, 0),
-      visible: smoothstep(-0.04, 0.03, altitude) * (1 - gloom * 0.85),
+      visible: smoothstep(-0.04, 0.03, altitude) * bodyCover,
     },
     moon: {
       x: moonX,
       y: Math.max(-altitude, 0),
-      visible: smoothstep(-0.02, -0.12, altitude) * (1 - gloom * 0.8),
+      visible: smoothstep(-0.02, -0.12, altitude) * bodyCover,
     },
     colors,
     stars: smoothstep(-0.08, -0.4, altitude) * (1 - clamp(cloudAmount * 1.1)) * (1 - gloom),

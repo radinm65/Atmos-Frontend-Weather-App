@@ -11,6 +11,7 @@
     --sky-middle 0.7s linear,
     --sky-bottom 0.7s linear,
     --sky-glow 0.7s linear,
+    --sky-sun-core 0.7s linear,
     --sky-cloud 0.7s linear,
     --sky-cloud-shade 0.7s linear,
     --sky-hill-far 0.7s linear,
@@ -105,7 +106,13 @@
 }
 
 .sun {
-  background: radial-gradient(circle, #fffdf0 0 38%, var(--sky-glow) 62%, transparent 72%);
+  /* closest-side: the gradient ends exactly at the disc's edge, so no ring is left behind. */
+  background: radial-gradient(
+    circle closest-side,
+    var(--sky-sun-core) 0 62%,
+    color-mix(in srgb, var(--sky-glow) 85%, transparent) 84%,
+    transparent 100%
+  );
   box-shadow:
     0 0 60px 24px color-mix(in srgb, var(--sky-glow) 70%, transparent),
     0 0 160px 80px color-mix(in srgb, var(--sky-glow) 30%, transparent);
@@ -169,9 +176,10 @@
   transition: opacity 0.7s linear;
 }
 
+/* Wider than the scene so sliding sideways never reveals the band's own edge. */
 .fogBand {
   position: absolute;
-  inset: 0;
+  inset: 0 -12%;
   background: linear-gradient(
     to bottom,
     transparent,
@@ -182,7 +190,7 @@
 }
 
 .fogBandSlow {
-  inset: 15% 0 -10% 0;
+  inset: 15% -12% -10% -12%;
   opacity: 0.7;
   animation-duration: 61s;
   animation-direction: alternate-reverse;

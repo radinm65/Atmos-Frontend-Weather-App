@@ -56,6 +56,7 @@ export function SkyScene({ state, className }: SkySceneProps) {
     '--sky-middle': colors.middle,
     '--sky-bottom': colors.bottom,
     '--sky-glow': colors.glow,
+    '--sky-sun-core': colors.sunCore,
     '--sky-cloud': colors.cloud,
     '--sky-cloud-shade': colors.cloudShade,
     '--sky-hill-far': colors.hillFar,

@@ -4,9 +4,14 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-8) var(--space-6);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  background: var(--glass-bg);
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge),
+    var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
   text-align: center;
 }
 
@@ -50,9 +55,9 @@
   border-radius: var(--radius-sm);
   background: linear-gradient(
     90deg,
-    var(--color-surface) 0%,
-    var(--color-surface-elevated) 50%,
-    var(--color-surface) 100%
+    var(--glass-bg) 0%,
+    var(--glass-sheen) 50%,
+    var(--glass-bg) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.4s ease-in-out infinite;

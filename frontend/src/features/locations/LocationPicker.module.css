@@ -7,17 +7,21 @@
   align-items: center;
   gap: var(--space-2);
   min-height: var(--touch-target);
-  padding: 0 var(--space-3);
-  border: 1px solid var(--color-border-strong);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-full);
-  background: var(--color-surface-elevated);
+  background: var(--glass-bg);
   color: var(--color-text);
   font-weight: 600;
+  box-shadow: inset 0 1px 0 var(--glass-edge);
   cursor: pointer;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  transition: background-color var(--motion-fast) ease;
 }
 
 .trigger:hover {
-  border-color: var(--color-accent);
+  background: var(--glass-bg-hover);
 }
 
 .triggerText {
@@ -29,17 +33,14 @@
 
 .panel {
   position: absolute;
-  top: calc(100% + var(--space-2));
+  top: calc(100% + var(--space-3));
   right: 0;
-  z-index: 20;
+  z-index: 40;
   display: grid;
   gap: var(--space-4);
   width: min(28rem, calc(100vw - 2 * var(--space-4)));
-  padding: var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-md);
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
 }
 
 .link {
@@ -58,7 +59,7 @@
   /* Anchor to the viewport so the panel never overflows the screen edge. */
   .panel {
     position: fixed;
-    top: var(--header-height);
+    top: calc(var(--header-height) + var(--space-6));
     right: var(--space-4);
     left: var(--space-4);
     width: auto;

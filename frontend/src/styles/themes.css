@@ -1,39 +1,84 @@
-/* Color tokens per theme. Values from docs/DESIGN_SPEC.md §3–4; the light palette is explicit, not inverted. */
+/*
+ * Colour tokens per theme. The app sits on full-screen weather video, so there are no solid
+ * surfaces: panels are translucent, blurred "liquid glass" tinted neutral (never blue).
+ * Dark = smoked glass with white text; light = frosted glass with near-black text.
+ * The tint is strong enough to keep 4.5:1 text contrast over bright clouds and dark night alike;
+ * re-check any new foreground/background pair over both extremes before shipping it.
+ */
 :root,
 [data-theme='dark'] {
   color-scheme: dark;
-  --color-bg: #080d18;
-  --color-surface: #101827;
-  --color-surface-elevated: #172235;
-  --color-border: #263449;
-  --color-text: #f4f7fc;
-  --color-text-muted: #a3b1c6;
-  --color-accent: #72d5ff;
-  --color-accent-strong: #399cff;
-  --color-on-accent: #080d18;
-  /* Form-control boundaries: 3:1+ on all dark surfaces. */
-  --color-border-strong: #5c6f8c;
-  --color-focus-ring: #72d5ff;
-  --color-success: #58d6a3;
-  --color-warning: #ffc66d;
-  --color-danger: #ff747e;
+
+  /* Shown only while a backdrop video and its poster are unavailable. */
+  --color-bg: #0b0c0f;
+
+  --color-text: #ffffff;
+  --color-text-muted: rgb(255 255 255 / 0.76);
+  --color-accent: #8fdcff;
+  --color-accent-strong: #5cc8ff;
+  --color-on-accent: #06121a;
+  --color-focus-ring: #ffffff;
+
+  --color-success: #6ee7b7;
+  --color-warning: #fcd34d;
+  --color-danger: #fca5a5;
+
+  /* Glass */
+  --glass-bg: rgb(14 16 20 / 0.46);
+  --glass-bg-strong: rgb(12 14 18 / 0.66);
+  --glass-bg-hover: rgb(24 27 33 / 0.58);
+  --glass-border: rgb(255 255 255 / 0.2);
+  --glass-edge: rgb(255 255 255 / 0.42);
+  --glass-sheen: rgb(255 255 255 / 0.16);
+  --glass-shadow: 0 10px 40px rgb(0 0 0 / 0.38);
+  --color-border: rgb(255 255 255 / 0.18);
+  --color-border-strong: rgb(255 255 255 / 0.5);
+  --color-track: rgb(255 255 255 / 0.18);
+
+  /* Over the video: keeps text readable on bright clouds. */
+  --backdrop-scrim: linear-gradient(rgb(0 0 0 / 0.28), rgb(0 0 0 / 0.5));
+
+  /* Chart colours */
+  --chart-temp: #ffb86b;
+  --chart-feels: #fff1d6;
+  --chart-rain: #7fd0ff;
+  --chart-wind: #b8f2c9;
+  --chart-uv: #ffd85e;
+  --chart-grid: rgb(255 255 255 / 0.14);
 }
 
 [data-theme='light'] {
   color-scheme: light;
-  --color-bg: #f4f7fb;
-  --color-surface: #ffffff;
-  --color-surface-elevated: #ffffff;
-  --color-border: #dce4ef;
-  --color-text: #152033;
-  --color-text-muted: #58677d;
-  --color-accent: #0772aa;
-  --color-accent-strong: #05598f;
+  --color-bg: #e9ebee;
+
+  --color-text: #14171c;
+  --color-text-muted: #39414c;
+  --color-accent: #0a6aa1;
+  --color-accent-strong: #07527e;
   --color-on-accent: #ffffff;
-  /* Form-control boundaries: 3:1+ on bg and surface. */
-  --color-border-strong: #7c8ba1;
-  --color-focus-ring: #05598f;
-  --color-success: #137a50;
-  --color-warning: #8a5700;
-  --color-danger: #b42332;
+  --color-focus-ring: #0a3d5f;
+
+  --color-success: #0f6b46;
+  --color-warning: #7d4b00;
+  --color-danger: #a8231b;
+
+  --glass-bg: rgb(255 255 255 / 0.58);
+  --glass-bg-strong: rgb(255 255 255 / 0.76);
+  --glass-bg-hover: rgb(255 255 255 / 0.7);
+  --glass-border: rgb(255 255 255 / 0.75);
+  --glass-edge: rgb(255 255 255 / 0.95);
+  --glass-sheen: rgb(255 255 255 / 0.55);
+  --glass-shadow: 0 10px 40px rgb(30 40 60 / 0.22);
+  --color-border: rgb(20 23 28 / 0.14);
+  --color-border-strong: rgb(20 23 28 / 0.5);
+  --color-track: rgb(20 23 28 / 0.14);
+
+  --backdrop-scrim: linear-gradient(rgb(255 255 255 / 0.04), rgb(255 255 255 / 0.14));
+
+  --chart-temp: #d9660a;
+  --chart-feels: #7a4a1a;
+  --chart-rain: #0a6aa1;
+  --chart-wind: #1d7a4a;
+  --chart-uv: #a86d00;
+  --chart-grid: rgb(20 23 28 / 0.14);
 }

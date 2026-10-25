@@ -1,43 +1,51 @@
-/* Theme-independent design tokens. Colors live in themes.css. See docs/DESIGN_SPEC.md §4a. */
+/* Theme-independent design tokens. Colors live in themes.css. See docs/DESIGN_SPEC.md. */
 :root {
   /* Inter for UI text, Fraunces for large editorial numerals (OPEN_DECISIONS D-04). Both are
      self-hosted in fonts.css; the system stack is the fallback while they load. */
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
 
-  --text-hero: clamp(4.5rem, 14vw, 9rem);
+  --text-hero: clamp(5rem, 15vw, 10rem);
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.25rem;
   --text-xl: 1.625rem;
-  --text-2xl: 2.25rem;
-  --leading-tight: 1.2;
+  --text-2xl: 2.5rem;
+  --leading-tight: 1.15;
   --leading-normal: 1.5;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
+  --space-5: 1.25rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-12: 3rem;
 
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
   --radius-full: 999px;
 
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.12);
-  --shadow-md: 0 8px 24px rgb(0 0 0 / 0.18);
+  /* Liquid glass */
+  --glass-blur: 26px;
+  --glass-saturate: 1.7;
 
-  /* Keeps text readable over photography (DESIGN_SPEC §9). */
-  --scrim-hero: linear-gradient(to top, rgb(8 13 24 / 0.78), rgb(8 13 24 / 0.15));
+  /* Aliases so shared components keep working: surfaces are glass now. */
+  --color-surface: var(--glass-bg);
+  --color-surface-elevated: var(--glass-bg-strong);
+
+  --shadow-sm: 0 2px 8px rgb(0 0 0 / 0.18);
+  --shadow-md: 0 10px 36px rgb(0 0 0 / 0.3);
 
   --motion-fast: 150ms;
   --motion-base: 250ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   --touch-target: 2.75rem;
-  --content-max: 72rem;
+  --content-max: 76rem;
   --header-height: 4rem;
 }

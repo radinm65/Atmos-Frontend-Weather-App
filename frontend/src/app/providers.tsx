@@ -1,5 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query'
 import type { QueryClient } from '@tanstack/react-query'
+import { MotionConfig } from 'motion/react'
 import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { ActiveLocationProvider } from '../features/locations/ActiveLocationProvider'
@@ -17,18 +18,23 @@ export interface ProvidersProps {
   queryClient?: QueryClient
 }
 
-/** App-wide providers: theme, server-state cache, the configured data source, active location. */
+/**
+ * App-wide providers: theme, motion preferences, server-state cache, the configured data source,
+ * and the active location. `reducedMotion="user"` makes every animation respect the OS setting.
+ */
 export function Providers({ children, dataSource, queryClient }: ProvidersProps) {
   const [source] = useState(() => dataSource ?? createDataSource(readConfig()))
   const [client] = useState(() => queryClient ?? createQueryClient())
 
   return (
     <ThemeProvider>
-      <QueryClientProvider client={client}>
-        <WeatherDataSourceContext.Provider value={source}>
-          <ActiveLocationProvider>{children}</ActiveLocationProvider>
-        </WeatherDataSourceContext.Provider>
-      </QueryClientProvider>
+      <MotionConfig reducedMotion="user">
+        <QueryClientProvider client={client}>
+          <WeatherDataSourceContext.Provider value={source}>
+            <ActiveLocationProvider>{children}</ActiveLocationProvider>
+          </WeatherDataSourceContext.Provider>
+        </QueryClientProvider>
+      </MotionConfig>
     </ThemeProvider>
   )
 }

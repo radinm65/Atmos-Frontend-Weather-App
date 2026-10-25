@@ -1,4 +1,5 @@
 import { Compass } from 'lucide-react'
+import { GlassPanel } from '../../components/ui/GlassPanel'
 import styles from './ChooseLocationPrompt.module.css'
 import { LocationSearch } from './LocationSearch'
 import { UseMyLocationButton } from './UseMyLocationButton'
@@ -11,8 +12,16 @@ export function ChooseLocationPrompt() {
   const source = useWeatherDataSource()
 
   return (
-    <section className={styles.prompt} aria-labelledby="choose-location-heading">
-      <Compass size={32} aria-hidden="true" className={styles.icon} />
+    <GlassPanel
+      as="section"
+      strong
+      interactive={false}
+      initial="hidden"
+      animate="visible"
+      className={styles.prompt}
+      aria-labelledby="choose-location-heading"
+    >
+      <Compass size={40} aria-hidden="true" className={styles.icon} />
       <h2 id="choose-location-heading" className={styles.title}>
         Choose a location
       </h2>
@@ -25,6 +34,6 @@ export function ChooseLocationPrompt() {
         <LocationSearch onSelect={setActiveLocation} />
       </div>
       <UseMyLocationButton onLocated={setActiveLocation} />
-    </section>
+    </GlassPanel>
   )
 }

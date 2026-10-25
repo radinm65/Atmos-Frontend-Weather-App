@@ -1,0 +1,59 @@
+/*
+ * Liquid-glass surfaces. Apply `.glass` (or `.glass-strong`, `.glass-pill`) to anything that
+ * floats over the weather backdrop. The effect is built from: a translucent tint, a strong
+ * backdrop blur with boosted saturation (so the video's colour glows through), a bright inner top
+ * edge, a hairline border, and a soft diagonal sheen. Where `backdrop-filter` is unsupported the
+ * tint alone is opaque enough to keep text readable.
+ */
+.glass,
+.glass-strong,
+.glass-pill {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge),
+    inset 0 -1px 0 rgb(255 255 255 / 0.04),
+    var(--glass-shadow);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .glass-strong,
+  .glass-pill {
+    background: var(--glass-bg-strong);
+  }
+}
+
+.glass-strong {
+  background: var(--glass-bg-strong);
+}
+
+.glass-pill {
+  border-radius: var(--radius-full);
+}
+
+/* Soft diagonal sheen, like light catching the glass. Purely decorative. */
+.glass::before,
+.glass-strong::before,
+.glass-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(120% 90% at var(--mx, 15%) var(--my, 0%), var(--glass-sheen), transparent 55%),
+    linear-gradient(135deg, rgb(255 255 255 / 0.1), transparent 38%);
+  pointer-events: none;
+  opacity: 0.9;
+  transition: opacity var(--motion-base) ease;
+}
+
+/* Keep content above the sheen layer. */
+.glass > *,
+.glass-strong > *,
+.glass-pill > * {
+  position: relative;
+}

@@ -1,0 +1,43 @@
+/* Behind all content: #root is its own stacking context (global.css), so -1 sits above the page
+   background but below every in-flow element. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--color-bg);
+  pointer-events: none;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+.media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* A touch of extra richness; the glass panels sit on top of this. */
+  filter: saturate(1.08) contrast(1.03);
+  transition: filter 1.2s ease;
+}
+
+/* Daytime footage shown after dark at the location. */
+.dim {
+  filter: saturate(0.8) contrast(1.02) brightness(0.42);
+}
+
+/* Keeps text readable over bright clouds; strength differs by theme (see themes.css). */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--backdrop-scrim);
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 40%, transparent 55%, rgb(0 0 0 / 0.28));
+}

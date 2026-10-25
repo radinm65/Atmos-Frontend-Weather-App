@@ -56,7 +56,12 @@ export function LocationPicker() {
       </button>
 
       {open ? (
-        <div id={panelId} className={styles.panel} role="group" aria-label="Choose a location">
+        <div
+          id={panelId}
+          className={`glass-strong ${styles.panel}`}
+          role="group"
+          aria-label="Choose a location"
+        >
           <LocationSearch onSelect={select} focusOnMount />
           <UseMyLocationButton onLocated={select} />
           <Link to="/locations" className={styles.link} onClick={() => setOpen(false)}>

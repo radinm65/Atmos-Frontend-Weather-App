@@ -1,0 +1,22 @@
+.panel {
+  position: fixed;
+  top: var(--panel-top);
+  right: var(--panel-right);
+  z-index: 1000;
+  display: grid;
+  gap: var(--space-4);
+  width: min(28rem, calc(100vw - 2 * var(--space-4)));
+  max-height: calc(100vh - var(--panel-top) - var(--space-4));
+  overflow-y: auto;
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+}
+
+@media (max-width: 768px) {
+  /* Full width under the header, so the panel never overflows the screen edge. */
+  .panel {
+    right: var(--space-4);
+    left: var(--space-4);
+    width: auto;
+  }
+}

@@ -7,6 +7,7 @@ import { WeatherBackdrop } from '../../features/backdrop/WeatherBackdrop'
 import { useBackdropScene } from '../../features/backdrop/useBackdropScene'
 import { LocationPicker } from '../../features/locations/LocationPicker'
 import { ThemeToggle } from '../../features/preferences/ThemeToggle'
+import { UnitsMenu } from '../../features/preferences/UnitsMenu'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import styles from './AppShell.module.css'
 import { SiteFooter } from './SiteFooter'
@@ -71,6 +72,7 @@ export function AppShell() {
 
             <div className={styles.controls}>
               <LocationPicker />
+              <UnitsMenu />
               <ThemeToggle />
             </div>
           </div>

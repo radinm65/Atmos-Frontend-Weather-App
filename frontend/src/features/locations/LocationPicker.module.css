@@ -30,22 +30,6 @@
   white-space: nowrap;
 }
 
-/*
- * The pop-up is rendered in a portal on <body>, so it is completely outside the header and cannot
- * change its height. Its position comes from the trigger's measured rectangle.
- */
-.panel {
-  position: fixed;
-  top: var(--picker-top);
-  right: var(--picker-right);
-  z-index: 1000;
-  display: grid;
-  gap: var(--space-4);
-  width: min(28rem, calc(100vw - 2 * var(--space-4)));
-  padding: var(--space-5);
-  border-radius: var(--radius-xl);
-}
-
 .link {
   justify-self: start;
   display: inline-flex;
@@ -57,12 +41,5 @@
 @media (max-width: 768px) {
   .triggerText {
     max-width: 7rem;
-  }
-
-  /* Full width under the header, so the panel never overflows the screen edge. */
-  .panel {
-    right: var(--space-4);
-    left: var(--space-4);
-    width: auto;
   }
 }

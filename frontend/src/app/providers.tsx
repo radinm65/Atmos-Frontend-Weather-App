@@ -4,6 +4,7 @@ import { MotionConfig } from 'motion/react'
 import { useState } from 'react'
 import type { ReactNode } from 'react'
 import { ActiveLocationProvider } from '../features/locations/ActiveLocationProvider'
+import { PreferencesProvider } from '../features/preferences/PreferencesProvider'
 import { ThemeProvider } from '../features/preferences/ThemeProvider'
 import { WeatherDataSourceContext } from '../features/weather/WeatherDataSourceContext'
 import { createDataSource } from '../lib/api'
@@ -31,7 +32,9 @@ export function Providers({ children, dataSource, queryClient }: ProvidersProps)
       <MotionConfig reducedMotion="user">
         <QueryClientProvider client={client}>
           <WeatherDataSourceContext.Provider value={source}>
-            <ActiveLocationProvider>{children}</ActiveLocationProvider>
+            <PreferencesProvider>
+              <ActiveLocationProvider>{children}</ActiveLocationProvider>
+            </PreferencesProvider>
           </WeatherDataSourceContext.Provider>
         </QueryClientProvider>
       </MotionConfig>

@@ -1,10 +1,7 @@
-import { DEFAULT_UNITS } from '../../lib/formatting'
 import type { UnitPreferences } from '../../lib/formatting'
+import { usePreferences } from './usePreferences'
 
-/**
- * Unit preferences used for display. Always metric for now; Phase 4 replaces this with the
- * persisted °C/°F and km/h/mph choice without changing callers.
- */
+/** The unit preferences used for display. Domain values stay metric; conversion is display-only. */
 export function useUnits(): UnitPreferences {
-  return DEFAULT_UNITS
+  return usePreferences().units
 }

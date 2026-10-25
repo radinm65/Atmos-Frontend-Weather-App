@@ -21,6 +21,10 @@
   transform: translateY(0);
 }
 
+/*
+ * The header has no box, border or background of its own. A soft shade (dark or light, by theme)
+ * fades down from the top edge so the brand, tabs and controls stay readable over any footage.
+ */
 .headerWrap {
   position: sticky;
   top: 0;
@@ -28,38 +32,32 @@
   padding: var(--space-3) var(--space-4) 0;
 }
 
-/*
- * The glass is painted by ::before, not by .header itself: an element with backdrop-filter becomes
- * the containing block for position: fixed descendants, which would trap the mobile tab bar
- * inside the header instead of pinning it to the viewport.
- */
+.headerWrap::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -3.25rem 0;
+  z-index: -1;
+  background: var(--header-shade);
+  /*
+   * Content scrolling under the header is blurred away progressively: strongest at the top edge,
+   * fading to nothing, so there is no visible box or edge. (This is on a pseudo-element, so it
+   * does not become the containing block for the fixed mobile tab bar.)
+   */
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent);
+  mask-image: linear-gradient(to bottom, #000 45%, transparent);
+  pointer-events: none;
+}
+
 .header {
-  position: relative;
-  isolation: isolate;
   display: flex;
   align-items: center;
   gap: var(--space-4);
   max-width: var(--content-max);
   min-height: var(--header-height);
   margin: 0 auto;
-  padding: 0 var(--space-3) 0 var(--space-5);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
-  box-shadow:
-    inset 0 1px 0 var(--glass-edge),
-    var(--glass-shadow);
-}
-
-.header::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background:
-    linear-gradient(135deg, rgb(255 255 255 / 0.1), transparent 40%), var(--glass-bg-strong);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  padding: 0 var(--space-2);
 }
 
 .brand {
@@ -72,6 +70,7 @@
   letter-spacing: 0.01em;
   color: var(--color-text);
   text-decoration: none;
+  text-shadow: var(--chrome-text-shadow);
 }
 
 .logo {
@@ -100,30 +99,33 @@
   gap: var(--space-2);
   min-height: var(--touch-target);
   padding: 0 var(--space-4);
-  border-radius: var(--radius-full);
-  color: var(--color-text-muted);
+  color: var(--color-text);
   font-size: var(--text-sm);
   font-weight: 600;
   text-decoration: none;
-  transition: color var(--motion-fast) ease;
+  text-shadow: var(--chrome-text-shadow);
+  opacity: 0.82;
+  transition: opacity var(--motion-fast) ease;
 }
 
 .navLink:hover {
-  color: var(--color-text);
+  opacity: 1;
 }
 
 .navLinkActive {
-  color: var(--color-text);
+  opacity: 1;
 }
 
-/* The sliding glass pill behind the active link (shared layout animation). */
+/* The active tab gets a sliding underline, so it is marked by shape as well as brightness. */
 .activePill {
   position: absolute;
-  inset: 2px;
+  right: var(--space-4);
+  bottom: 0.2rem;
+  left: var(--space-4);
+  height: 3px;
   border-radius: var(--radius-full);
-  background: var(--glass-bg-hover);
-  border: 1px solid var(--glass-edge);
-  box-shadow: 0 4px 16px rgb(0 0 0 / 0.22);
+  background: var(--color-text);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-text) 55%, transparent);
 }
 
 .navIcon,
@@ -143,18 +145,20 @@
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: var(--space-8) var(--space-4) var(--space-12);
+  padding: var(--space-6) var(--space-4) var(--space-12);
 }
 
 .main:focus {
   outline: none;
 }
 
-/* Compact layout: primary navigation becomes a floating glass tab bar at the bottom. */
+/*
+ * Compact layout: primary navigation becomes a floating tab bar at the bottom. Unlike the header,
+ * it keeps a glass background, because content scrolls underneath it.
+ */
 @media (max-width: 768px) {
   .header {
     gap: var(--space-2);
-    padding-left: var(--space-4);
   }
 
   .nav {
@@ -198,6 +202,13 @@
     min-height: 3.25rem;
     padding: var(--space-1) 0;
     font-size: var(--text-xs);
+    text-shadow: none;
+  }
+
+  .activePill {
+    right: 30%;
+    bottom: 0.1rem;
+    left: 30%;
   }
 
   .brand span {
@@ -205,12 +216,6 @@
   }
 
   .main {
-    padding-top: var(--space-6);
-  }
-}
-
-@media (max-width: 480px) {
-  .brand {
-    margin-right: 0;
+    padding-top: var(--space-4);
   }
 }

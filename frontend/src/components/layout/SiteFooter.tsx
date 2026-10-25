@@ -7,32 +7,30 @@ import styles from './SiteFooter.module.css'
  */
 export function SiteFooter() {
   return (
-    <footer className={styles.wrap}>
-      <div className={`glass ${styles.footer}`}>
-        <p>
-          Weather data by{' '}
-          <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">
-            Open-Meteo.com
-          </a>{' '}
-          (
-          <a
-            href="https://creativecommons.org/licenses/by/4.0/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            CC BY 4.0
-          </a>
-          ). Place names from{' '}
-          <a href="https://www.geonames.org/" target="_blank" rel="noopener noreferrer">
-            GeoNames
-          </a>
-          . Background footage from{' '}
-          <a href="https://mixkit.co/" target="_blank" rel="noopener noreferrer">
-            Mixkit
-          </a>
-          ; it illustrates the kind of weather, not the place.
-        </p>
-      </div>
+    <footer className={styles.footer}>
+      <p className={styles.text}>
+        Weather data by{' '}
+        <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">
+          Open-Meteo.com
+        </a>{' '}
+        (
+        <a
+          href="https://creativecommons.org/licenses/by/4.0/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          CC BY 4.0
+        </a>
+        ). Place names from{' '}
+        <a href="https://www.geonames.org/" target="_blank" rel="noopener noreferrer">
+          GeoNames
+        </a>
+        . Background footage from{' '}
+        <a href="https://mixkit.co/" target="_blank" rel="noopener noreferrer">
+          Mixkit
+        </a>
+        ; it illustrates the kind of weather, not the place.
+      </p>
     </footer>
   )
 }

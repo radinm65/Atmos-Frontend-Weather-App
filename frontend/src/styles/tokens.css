@@ -1,8 +1,9 @@
 /* Theme-independent design tokens. Colors live in themes.css. See docs/DESIGN_SPEC.md. */
 :root {
-  /* Inter for UI text, Fraunces for large editorial numerals (OPEN_DECISIONS D-04). Both are
-     self-hosted in fonts.css; the system stack is the fallback while they load. */
-  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Plus Jakarta Sans for UI text, Fraunces for large editorial numerals (OPEN_DECISIONS D-04).
+     Both are self-hosted in fonts.css; the system stack is the fallback while they load. */
+  --font-sans:
+    'Plus Jakarta Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
 
   --text-hero: clamp(5rem, 15vw, 10rem);

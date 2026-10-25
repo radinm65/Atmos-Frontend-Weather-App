@@ -1,19 +1,36 @@
-.wrap {
-  padding: 0 var(--space-4) var(--space-4);
+/* No box, border or background: a soft shade fades up from the bottom edge so the text stays readable. */
+.footer {
+  position: relative;
+  isolation: isolate;
+  padding: var(--space-8) var(--space-4) var(--space-6);
 }
 
-.footer {
+.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 0;
+  z-index: -1;
+  background: var(--footer-shade);
+  pointer-events: none;
+}
+
+.text {
   max-width: var(--content-max);
   margin: 0 auto;
-  padding: var(--space-4) var(--space-6);
-  border-radius: var(--radius-lg);
-  color: var(--color-text-muted);
+  padding: 0 var(--space-2);
+  color: var(--color-text);
   font-size: var(--text-sm);
+  text-shadow: var(--chrome-text-shadow);
+}
+
+.text a {
+  color: var(--color-text);
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
   /* Leave room for the floating bottom tab bar. */
-  .wrap {
+  .footer {
     padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
   }
 }

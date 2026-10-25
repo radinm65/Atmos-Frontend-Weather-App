@@ -81,7 +81,7 @@ Exit criteria:
 **Goal:** Deliver the main polished weather pages.
 
 Tasks (the owner wants this phase to feel beautiful, alive and information-rich; see `DESIGN_SPEC.md` §9a):
-- **3a, visual foundation (done):** self-hosted Inter and Fraunces, neutral liquid-glass tokens for both themes, motion rules.
+- **3a, visual foundation (done):** self-hosted Plus Jakarta Sans and Fraunces, neutral liquid-glass tokens for both themes, motion rules.
 - **3b, live wallpaper (done):** eight real looping weather videos with posters, the scene-mapping module, a crossfading full-screen backdrop with reduced-motion, data-saver and failure fallbacks. (An earlier hand-drawn procedural sky was built, judged to look fake, and removed.)
 - **3c, glass shell (done):** floating glass header with an animated nav indicator, floating bottom tab bar on mobile, glass footer, buttons, inputs and search.
 - **3d, Overview (done):** hero with animated temperature and weather icon, 24-hour strip, 10-day range bars, interactive temperature and wind charts, and nine widgets (wind compass, humidity, UV, pressure, sun arc, precipitation, visibility, cloud cover, air quality). The data layer was extended for these (UV, pressure, gusts, visibility, dew point, daily extremes, an air-quality source).

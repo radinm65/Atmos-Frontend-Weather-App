@@ -4,11 +4,11 @@
  * the fallback font, so weather is never hidden while fonts load.
  */
 @font-face {
-  font-family: 'Inter Variable';
+  font-family: 'Plus Jakarta Sans Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url('../assets/fonts/inter-latin-wght-normal.woff2') format('woff2-variations');
+  font-weight: 200 800;
+  src: url('../assets/fonts/plus-jakarta-sans-latin-wght-normal.woff2') format('woff2-variations');
 }
 
 @font-face {

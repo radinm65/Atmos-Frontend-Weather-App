@@ -38,6 +38,23 @@
   /* Over the video: keeps text readable on bright clouds. */
   --backdrop-scrim: linear-gradient(rgb(0 0 0 / 0.28), rgb(0 0 0 / 0.5));
 
+  /* Borderless header and footer sit on a soft shade so the tabs and text stay readable. */
+  --header-shade: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 0.74),
+    rgb(0 0 0 / 0.55) 45%,
+    rgb(0 0 0 / 0.22) 80%,
+    rgb(0 0 0 / 0)
+  );
+  --footer-shade: linear-gradient(
+    to top,
+    rgb(0 0 0 / 0.66),
+    rgb(0 0 0 / 0.46) 35%,
+    rgb(0 0 0 / 0.2) 70%,
+    rgb(0 0 0 / 0)
+  );
+  --chrome-text-shadow: 0 1px 10px rgb(0 0 0 / 0.5);
+
   /* Chart colours */
   --chart-temp: #ffb86b;
   --chart-feels: #fff1d6;
@@ -57,12 +74,13 @@
 
 [data-theme='light'] {
   color-scheme: light;
-  --color-bg: #e9ebee;
+  /* A dimmer, warmer off-white instead of bright white, which is hard on the eyes. */
+  --color-bg: #d3d0c9;
 
-  --color-text: #14171c;
-  --color-text-muted: #39414c;
-  --color-accent: #0a6aa1;
-  --color-accent-strong: #07527e;
+  --color-text: #15181c;
+  --color-text-muted: #2a3038;
+  --color-accent: #0a5f92;
+  --color-accent-strong: #074c75;
   --color-on-accent: #ffffff;
   --color-focus-ring: #0a3d5f;
 
@@ -70,28 +88,43 @@
   --color-warning: #7d4b00;
   --color-danger: #a8231b;
 
-  --glass-bg: rgb(255 255 255 / 0.58);
-  --glass-bg-strong: rgb(255 255 255 / 0.76);
-  --glass-bg-hover: rgb(255 255 255 / 0.7);
-  --glass-border: rgb(255 255 255 / 0.75);
-  --glass-edge: rgb(255 255 255 / 0.95);
-  --glass-sheen: rgb(255 255 255 / 0.55);
-  --glass-shadow: 0 10px 40px rgb(30 40 60 / 0.22);
-  --color-border: rgb(20 23 28 / 0.14);
-  --color-border-strong: rgb(20 23 28 / 0.5);
-  --color-track: rgb(20 23 28 / 0.14);
+  --glass-bg: rgb(220 217 210 / 0.7);
+  --glass-bg-strong: rgb(224 221 214 / 0.84);
+  --glass-bg-hover: rgb(230 227 220 / 0.82);
+  --glass-border: rgb(255 255 255 / 0.38);
+  --glass-edge: rgb(255 255 255 / 0.55);
+  --glass-sheen: rgb(255 255 255 / 0.26);
+  --glass-shadow: 0 10px 40px rgb(40 36 30 / 0.28);
+  --color-border: rgb(20 23 28 / 0.16);
+  --color-border-strong: rgb(20 23 28 / 0.52);
+  --color-track: rgb(20 23 28 / 0.16);
 
-  --backdrop-scrim: linear-gradient(rgb(255 255 255 / 0.04), rgb(255 255 255 / 0.14));
+  /* Tones the footage down a little so it is not glaring behind the pale glass. */
+  --backdrop-scrim: linear-gradient(rgb(58 54 48 / 0.14), rgb(58 54 48 / 0.28));
 
-  --chart-temp: #d9660a;
-  --chart-feels: #7a4a1a;
-  --chart-rain: #0a6aa1;
-  --chart-wind: #1d7a4a;
-  --chart-uv: #a86d00;
-  --chart-grid: rgb(20 23 28 / 0.14);
+  --header-shade: linear-gradient(
+    to bottom,
+    rgb(210 206 198 / 0.94),
+    rgb(210 206 198 / 0.66) 58%,
+    transparent
+  );
+  --footer-shade: linear-gradient(
+    to top,
+    rgb(210 206 198 / 0.94),
+    rgb(210 206 198 / 0.66) 58%,
+    transparent
+  );
+  --chrome-text-shadow: none;
+
+  --chart-temp: #c25a06;
+  --chart-feels: #6d4217;
+  --chart-rain: #0a5f92;
+  --chart-wind: #1a6e43;
+  --chart-uv: #94600a;
+  --chart-grid: rgb(20 23 28 / 0.16);
 
   --aqi-good: #0f7a4d;
-  --aqi-moderate: #9a7400;
+  --aqi-moderate: #8f6c00;
   --aqi-sensitive: #b45309;
   --aqi-unhealthy: #b3261e;
   --aqi-very-unhealthy: #7e3fb5;

@@ -9,7 +9,6 @@ import { normalizeAirQuality, normalizeForecast, normalizeGeocoding } from './no
 import { conditionFromCode } from './wmo'
 import {
   CURRENT_TIME,
-  DAY_1,
   airQualityFixture,
   berlin,
   forecastFixture,
@@ -59,7 +58,7 @@ describe('normalizeForecast', () => {
       precipitationProbability: 8,
       isDay: false,
     })
-    expect(hourly[0]?.time).toBe(new Date(DAY_1 * 1000).toISOString())
+    expect(hourly[0]?.time).toBe(new Date(CURRENT_TIME * 1000).toISOString())
     expect(hourly[1]?.temperature).toBeNull()
     expect(hourly[2]).toMatchObject({
       precipitationProbability: null,

@@ -1,0 +1,78 @@
+.panel {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.scroller {
+  margin: 0 calc(-1 * var(--space-2));
+  padding: var(--space-2);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+  border-radius: var(--radius-lg);
+}
+
+.list {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hour {
+  flex: 0 0 4.75rem;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  scroll-snap-align: start;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color var(--motion-fast) ease,
+    transform var(--motion-fast) var(--ease-out);
+}
+
+.hour:hover {
+  background: var(--glass-bg);
+  transform: translateY(-3px);
+}
+
+/* The current hour is outlined as well as filled, so it is not colour-only. */
+.now {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-edge);
+}
+
+.time {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.temp {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.rain {
+  display: inline-flex;
+  align-items: center;
+  color: var(--chart-rain);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}

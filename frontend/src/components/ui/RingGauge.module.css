@@ -1,0 +1,17 @@
+.ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.ring svg {
+  position: absolute;
+  inset: 0;
+}
+
+.center {
+  position: relative;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}

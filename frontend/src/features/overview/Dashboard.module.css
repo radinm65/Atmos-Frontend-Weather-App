@@ -1,0 +1,47 @@
+.dashboard {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* Outlook beside the chart on wide screens; stacked on narrow ones. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+@media (min-width: 64rem) {
+  .split {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: start;
+  }
+}
+
+/* Nine widgets: 3 columns wide, 2 medium, 1 narrow, so the last row is never an orphan. */
+.details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+@media (min-width: 36rem) {
+  .details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .details {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.side {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.chartFallback {
+  min-height: 20rem;
+  border-radius: var(--radius-xl);
+}

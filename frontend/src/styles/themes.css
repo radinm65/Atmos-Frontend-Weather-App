@@ -45,6 +45,14 @@
   --chart-wind: #b8f2c9;
   --chart-uv: #ffd85e;
   --chart-grid: rgb(255 255 255 / 0.14);
+
+  /* Air quality bands. The band name is always shown too, so colour is never the only signal. */
+  --aqi-good: #6ee7b7;
+  --aqi-moderate: #fde047;
+  --aqi-sensitive: #fdba74;
+  --aqi-unhealthy: #fca5a5;
+  --aqi-very-unhealthy: #d8b4fe;
+  --aqi-hazardous: #fb7185;
 }
 
 [data-theme='light'] {
@@ -81,4 +89,11 @@
   --chart-wind: #1d7a4a;
   --chart-uv: #a86d00;
   --chart-grid: rgb(20 23 28 / 0.14);
+
+  --aqi-good: #0f7a4d;
+  --aqi-moderate: #9a7400;
+  --aqi-sensitive: #b45309;
+  --aqi-unhealthy: #b3261e;
+  --aqi-very-unhealthy: #7e3fb5;
+  --aqi-hazardous: #9f1239;
 }

@@ -1,0 +1,143 @@
+/* Shared pieces for the dashboard widgets. */
+.value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.unit {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.stack {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+}
+
+.scale {
+  position: relative;
+  width: 100%;
+  height: 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.scaleUv {
+  background: linear-gradient(90deg, #6ee7b7, #e8e86b 30%, #ffb454 55%, #ff6f4d 78%, #c77dff);
+}
+
+.scaleVisibility {
+  background: linear-gradient(90deg, #ff6f4d, #ffb454 30%, #e8e86b 55%, #6ee7b7);
+}
+
+.marker {
+  position: absolute;
+  top: 50%;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: -0.55rem 0 0 -0.55rem;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: rgb(10 12 16 / 0.8);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.5);
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.chip {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: var(--space-2) var(--space-1);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+.chip strong {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  width: 100%;
+  height: 3.4rem;
+}
+
+.bar {
+  flex: 1;
+  min-height: 3px;
+  border-radius: 3px 3px 1px 1px;
+  background: linear-gradient(
+    to top,
+    var(--chart-rain),
+    color-mix(in srgb, var(--chart-rain) 40%, transparent)
+  );
+  transform-origin: bottom;
+}
+
+.compass {
+  width: 7.5rem;
+  height: 7.5rem;
+}
+
+.sunArc {
+  width: 100%;
+  max-width: 14rem;
+}
+
+.sunTimes {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 14rem;
+  font-size: var(--text-sm);
+}
+
+.sunTimes span {
+  display: grid;
+  gap: 2px;
+}
+
+.sunTimes strong {
+  font-size: var(--text-base);
+}
+
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.error {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}

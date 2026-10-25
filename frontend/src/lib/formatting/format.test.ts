@@ -5,11 +5,16 @@ import {
   convertWindSpeed,
   formatAge,
   formatDateTime,
+  formatDistance,
+  formatDuration,
   formatLocalDate,
   formatPercent,
   formatPrecipitation,
+  formatPressure,
   formatTemperature,
   formatTime,
+  formatUv,
+  formatWeekday,
   formatWindSpeed,
   toLocalDate,
 } from './index'
@@ -61,6 +66,31 @@ describe('formatting measurements', () => {
   })
 })
 
+describe('distance, pressure, duration and UV', () => {
+  it('formats visibility', () => {
+    expect(formatDistance(25120)).toBe('25 km')
+    expect(formatDistance(4400)).toBe('4.4 km')
+    expect(formatDistance(800)).toBe('800 m')
+    expect(formatDistance(null)).toBe(MISSING)
+  })
+
+  it('formats pressure and duration', () => {
+    expect(formatPressure(996.4)).toBe('996 hPa')
+    expect(formatPressure(null)).toBe(MISSING)
+    expect(formatDuration(36040)).toBe('10 h 01 min')
+    expect(formatDuration(0)).toBe('0 h 00 min')
+    expect(formatDuration(undefined)).toBe(MISSING)
+  })
+
+  it('formats the UV index', () => {
+    expect(formatUv(0.45)).toBe('0.5')
+    expect(formatUv(3)).toBe('3')
+    expect(formatUv(7.24)).toBe('7.2')
+    expect(formatUv(11.4)).toBe('11')
+    expect(formatUv(null)).toBe(MISSING)
+  })
+})
+
 describe('time formatting', () => {
   // 2026-10-24T15:00:00Z is 17:00 in Berlin (CEST) and 08:00 in Los Angeles (PDT).
   const instant = '2026-10-24T15:00:00.000Z'
@@ -82,6 +112,12 @@ describe('time formatting', () => {
 
   it('formats a local date without shifting the day', () => {
     expect(formatLocalDate('2026-10-24')).toBe('Sat 24 Oct')
+  })
+
+  it('formats a weekday from a local date', () => {
+    expect(formatWeekday('2026-10-24')).toBe('Sat')
+    expect(formatWeekday('2026-10-26')).toBe('Mon')
+    expect(formatWeekday('nope')).toBe(MISSING)
   })
 
   it('returns a dash for invalid input', () => {

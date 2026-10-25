@@ -42,7 +42,8 @@ export function forecastFixture() {
       is_day: 0,
     },
     hourly: {
-      time: [DAY_1, DAY_1 + 3600, DAY_1 + 7200],
+      // Starts at the "current" observation so forecast-from-now views have data.
+      time: [CURRENT_TIME, CURRENT_TIME + 3600, CURRENT_TIME + 7200],
       temperature_2m: [11.4, null, 11.3],
       apparent_temperature: [9.8, 9.5, null],
       relative_humidity_2m: [80, 85, null],

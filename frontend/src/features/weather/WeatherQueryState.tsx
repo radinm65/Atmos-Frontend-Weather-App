@@ -9,14 +9,17 @@ import { useWeather } from './useWeather'
 
 export interface WeatherQueryStateProps {
   location: Location
-  children: (report: WeatherReport) => ReactNode
+  /** Shown while the first load is in flight. Defaults to a generic skeleton. */
+  loading?: ReactNode
+  /** `freshness` is the "how current is this" label; place it wherever the layout wants it. */
+  children: (report: WeatherReport, freshness: ReactNode) => ReactNode
 }
 
 /**
  * Loads weather for a location and renders loading, error, or success. After a successful load,
- * a failed refresh keeps the old data on screen, clearly marked as out of date.
+ * a failed refresh keeps the old data on screen, clearly marked as out of date in `freshness`.
  */
-export function WeatherQueryState({ location, children }: WeatherQueryStateProps) {
+export function WeatherQueryState({ location, loading, children }: WeatherQueryStateProps) {
   const query = useWeather(location)
 
   if (query.data === undefined) {
@@ -24,17 +27,15 @@ export function WeatherQueryState({ location, children }: WeatherQueryStateProps
       const { title, message } = describeError(query.error)
       return <ErrorState title={title} message={message} onRetry={() => void query.refetch()} />
     }
-    return <LoadingState label={`Loading weather for ${location.name}`} lines={4} />
+    return loading ?? <LoadingState label={`Loading weather for ${location.name}`} lines={4} />
   }
 
-  return (
-    <>
-      <FreshnessLabel
-        report={query.data}
-        refreshFailed={query.isError}
-        onRetry={() => void query.refetch()}
-      />
-      {children(query.data)}
-    </>
+  const freshness = (
+    <FreshnessLabel
+      report={query.data}
+      refreshFailed={query.isError}
+      onRetry={() => void query.refetch()}
+    />
   )
+  return <>{children(query.data, freshness)}</>
 }

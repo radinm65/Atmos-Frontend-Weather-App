@@ -31,6 +31,7 @@ export function forecastFixture() {
       relative_humidity_2m: 82,
       wind_speed_10m: 13.8,
       precipitation: 0,
+      cloud_cover: 100,
       weather_code: 3,
       is_day: 0,
     },
@@ -39,6 +40,8 @@ export function forecastFixture() {
       temperature_2m: [11.4, null, 11.3],
       precipitation_probability: [8, 0, null],
       weather_code: [3, 61, null],
+      cloud_cover: [100, 92, null],
+      wind_speed_10m: [12.1, 14.0, null],
       is_day: [0, 0, 1],
     },
     daily: {
@@ -48,6 +51,8 @@ export function forecastFixture() {
       precipitation_probability_max: [88, 10, null],
       precipitation_sum: [1.2, 0, null],
       weather_code: [61, 3, null],
+      sunrise: [DAY_1 + 24480, DAY_2 + 28140, null], // 06:48 CEST, 06:49 CET, missing
+      sunset: [DAY_1 + 62400, DAY_2 + 62280, null], // 17:20 CEST, 16:18 CET, missing
     },
   }
 }

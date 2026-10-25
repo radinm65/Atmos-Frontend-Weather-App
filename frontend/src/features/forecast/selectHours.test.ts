@@ -7,6 +7,8 @@ const hour = (iso: string): HourlyForecast => ({
   temperature: 10,
   precipitationProbability: null,
   condition: null,
+  cloudCover: null,
+  windSpeed: null,
   isDay: null,
 })
 

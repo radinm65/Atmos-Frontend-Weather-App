@@ -34,6 +34,7 @@ export const forecastResponseSchema = z.object({
     relative_humidity_2m: maybeNumber,
     wind_speed_10m: maybeNumber,
     precipitation: maybeNumber,
+    cloud_cover: maybeNumber,
     weather_code: maybeNumber,
     is_day: maybeNumber,
   }),
@@ -42,6 +43,8 @@ export const forecastResponseSchema = z.object({
     temperature_2m: numberSeries,
     precipitation_probability: numberSeries,
     weather_code: numberSeries,
+    cloud_cover: numberSeries,
+    wind_speed_10m: numberSeries,
     is_day: numberSeries,
   }),
   daily: z.object({
@@ -51,6 +54,9 @@ export const forecastResponseSchema = z.object({
     precipitation_probability_max: numberSeries,
     precipitation_sum: numberSeries,
     weather_code: numberSeries,
+    // Unix seconds because the request uses timeformat=unixtime.
+    sunrise: numberSeries,
+    sunset: numberSeries,
   }),
 })
 

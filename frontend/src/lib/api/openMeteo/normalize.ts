@@ -17,6 +17,11 @@ function at(series: readonly (number | null)[] | undefined, index: number): numb
   return series?.[index] ?? null
 }
 
+function isoAt(series: readonly (number | null)[] | undefined, index: number): string | null {
+  const value = at(series, index)
+  return value === null ? null : toIso(value)
+}
+
 function conditionAt(
   series: readonly (number | null)[] | undefined,
   index: number,
@@ -54,6 +59,8 @@ export function normalizeForecast(
     temperature: at(hourly.temperature_2m, index),
     precipitationProbability: at(hourly.precipitation_probability, index),
     condition: conditionAt(hourly.weather_code, index),
+    cloudCover: at(hourly.cloud_cover, index),
+    windSpeed: at(hourly.wind_speed_10m, index),
     isDay: toIsDay(at(hourly.is_day, index)),
   }))
 
@@ -68,6 +75,8 @@ export function normalizeForecast(
       condition: conditionAt(daily.weather_code, index),
       precipitationProbability: at(daily.precipitation_probability_max, index),
       precipitationSum: at(daily.precipitation_sum, index),
+      sunrise: isoAt(daily.sunrise, index),
+      sunset: isoAt(daily.sunset, index),
     })
   })
 
@@ -82,6 +91,7 @@ export function normalizeForecast(
       humidity: current.relative_humidity_2m ?? null,
       windSpeed: current.wind_speed_10m ?? null,
       precipitation: current.precipitation ?? null,
+      cloudCover: current.cloud_cover ?? null,
       isDay: toIsDay(current.is_day),
       observedAt: toIso(current.time),
     },

@@ -6,7 +6,7 @@ import type { Location } from './location'
  * `WeatherReport.timezone`, never silently in the browser's zone (D-11).
  */
 
-/** Matches the photography scene categories in DESIGN_SPEC §9. */
+/** Categories the sky scene (DESIGN_SPEC §9a) knows how to draw. */
 export type ConditionCategory =
   'clear' | 'partly-cloudy' | 'overcast' | 'fog' | 'rain' | 'snow' | 'thunderstorm' | 'unknown'
 
@@ -25,6 +25,8 @@ export interface CurrentWeather {
   humidity: number | null
   windSpeed: number | null
   precipitation: number | null
+  /** Sky cover, 0–100 %. Drives how cloudy the sky scene looks. */
+  cloudCover: number | null
   /** `null` when the provider does not say. */
   isDay: boolean | null
   observedAt: string
@@ -35,6 +37,8 @@ export interface HourlyForecast {
   temperature: number | null
   precipitationProbability: number | null
   condition: WeatherCondition | null
+  cloudCover: number | null
+  windSpeed: number | null
   isDay: boolean | null
 }
 
@@ -46,6 +50,9 @@ export interface DailyForecast {
   condition: WeatherCondition | null
   precipitationProbability: number | null
   precipitationSum: number | null
+  /** Sun times as UTC instants; `null` when missing (e.g. polar day or night). */
+  sunrise: string | null
+  sunset: string | null
 }
 
 export type DataSourceKind = 'live' | 'snapshot'

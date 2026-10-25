@@ -61,6 +61,21 @@ describe('normalizeForecast', () => {
     expect(daily.map((day) => day.date)).toEqual(['2026-10-24', '2026-10-25', '2026-10-26'])
   })
 
+  it('maps cloud cover and hourly wind for the sky scene', () => {
+    const report = normalize()
+    expect(report.current.cloudCover).toBe(100)
+    expect(report.hourly[1]).toMatchObject({ cloudCover: 92, windSpeed: 14 })
+    expect(report.hourly[2]).toMatchObject({ cloudCover: null, windSpeed: null })
+  })
+
+  it('maps sunrise and sunset as UTC instants, keeping missing ones null', () => {
+    const { daily } = normalize()
+    // 06:48 CEST on 2026-10-24 is 04:48 UTC; 16:18 CET on 2026-10-25 is 15:18 UTC.
+    expect(daily[0]?.sunrise).toBe('2026-10-24T04:48:00.000Z')
+    expect(daily[1]?.sunset).toBe('2026-10-25T15:18:00.000Z')
+    expect(daily[2]).toMatchObject({ sunrise: null, sunset: null })
+  })
+
   it('keeps missing daily values as null', () => {
     const last = normalize().daily[2]
     expect(last).toMatchObject({

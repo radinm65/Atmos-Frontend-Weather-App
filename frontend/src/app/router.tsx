@@ -54,17 +54,6 @@ export const routes: RouteObject[] = [
               Component: (await import('../features/locations/LocationsPage')).LocationsPage,
             }),
           },
-          // Development-only sky workbench; excluded from production builds.
-          ...(import.meta.env.DEV
-            ? [
-                {
-                  path: 'dev/sky',
-                  lazy: async () => ({
-                    Component: (await import('../features/sky/SkyLab')).SkyLab,
-                  }),
-                },
-              ]
-            : []),
           { path: '*', element: <NotFoundPage /> },
         ],
       },

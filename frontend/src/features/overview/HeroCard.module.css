@@ -14,6 +14,18 @@
   gap: var(--space-4);
 }
 
+.topActions {
+  display: grid;
+  justify-items: end;
+  gap: var(--space-3);
+}
+
+@media (max-width: 768px) {
+  .topActions {
+    justify-items: start;
+  }
+}
+
 .place {
   font-size: clamp(2rem, 5vw, 3.25rem);
   font-weight: 500;

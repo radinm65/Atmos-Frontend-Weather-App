@@ -30,6 +30,65 @@
   white-space: nowrap;
 }
 
+.saved {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.savedTitle {
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.savedList {
+  display: grid;
+  gap: var(--space-1);
+  max-height: 11rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.savedItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+  width: 100%;
+  min-height: var(--touch-target);
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.savedItem:hover {
+  background: var(--glass-bg-hover);
+}
+
+/* The place currently shown is marked by a bar as well as by the fill. */
+.savedItem[aria-current='true'] {
+  background: var(--glass-bg-hover);
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+
+.savedName {
+  font-weight: 600;
+}
+
+.savedDetail {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
 .link {
   justify-self: start;
   display: inline-flex;

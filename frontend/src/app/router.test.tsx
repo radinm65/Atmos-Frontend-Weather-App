@@ -51,7 +51,7 @@ describe('app shell', () => {
     expect(locationsTab.closest('li')?.className).toContain('desktopOnly')
 
     await userEvent.click(screen.getByRole('button', { name: /choose location/i }))
-    expect(screen.getByRole('link', { name: 'Saved locations' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Manage saved locations' })).toHaveAttribute(
       'href',
       '/locations',
     )

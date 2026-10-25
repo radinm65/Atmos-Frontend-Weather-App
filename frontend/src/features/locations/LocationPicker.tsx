@@ -2,11 +2,13 @@ import { ChevronDown, MapPin } from 'lucide-react'
 import { useCallback, useId, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnchoredPanel } from '../../components/ui/AnchoredPanel'
+import { describeLocationDetail } from '../../domain/location'
 import type { Location } from '../../domain/location'
 import { LocationSearch } from './LocationSearch'
 import styles from './LocationPicker.module.css'
 import { UseMyLocationButton } from './UseMyLocationButton'
 import { useActiveLocation } from './useActiveLocation'
+import { useSavedLocations } from './useSavedLocations'
 
 /**
  * Header control: shows the active place and opens a search panel to change it. The panel is an
@@ -15,6 +17,7 @@ import { useActiveLocation } from './useActiveLocation'
 export function LocationPicker() {
   const panelId = useId()
   const { activeLocation, setActiveLocation } = useActiveLocation()
+  const { saved } = useSavedLocations()
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const close = useCallback(() => setOpen(false), [])
@@ -48,9 +51,33 @@ export function LocationPicker() {
         label="Choose a location"
       >
         <LocationSearch onSelect={select} focusOnMount />
+
+        {saved.length > 0 ? (
+          <section aria-labelledby={`${panelId}-saved`} className={styles.saved}>
+            <h2 id={`${panelId}-saved`} className={styles.savedTitle}>
+              Saved
+            </h2>
+            <ul className={styles.savedList}>
+              {saved.map((place) => (
+                <li key={place.id}>
+                  <button
+                    type="button"
+                    className={styles.savedItem}
+                    aria-current={activeLocation?.id === place.id ? 'true' : undefined}
+                    onClick={() => select(place)}
+                  >
+                    <span className={styles.savedName}>{place.name}</span>
+                    <span className={styles.savedDetail}>{describeLocationDetail(place)}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
         <UseMyLocationButton onLocated={select} />
         <Link to="/locations" className={styles.link} onClick={close}>
-          Saved locations
+          Manage saved locations
         </Link>
       </AnchoredPanel>
     </div>

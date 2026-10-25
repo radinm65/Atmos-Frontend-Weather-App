@@ -11,6 +11,7 @@ import {
   formatDateTime,
   formatTemperature,
 } from '../../lib/formatting'
+import { SaveLocationButton } from '../locations/SaveLocationButton'
 import { useUnits } from '../preferences/useUnits'
 import { describeFeelsLike } from '../weather/describe'
 import { summarizeDay } from './summary'
@@ -51,7 +52,10 @@ export function HeroCard({ report, freshness }: HeroCardProps) {
               .join(' · ')}
           </p>
         </div>
-        {freshness}
+        <div className={styles.topActions}>
+          {freshness}
+          <SaveLocationButton location={location} />
+        </div>
       </div>
 
       <div className={styles.main}>

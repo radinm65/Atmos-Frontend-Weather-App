@@ -1,0 +1,55 @@
+.page {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.heading {
+  font-size: var(--text-2xl);
+  letter-spacing: -0.02em;
+}
+
+.add {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 40rem;
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+}
+
+.addTitle {
+  font-size: var(--text-lg);
+}
+
+.note {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: var(--space-4);
+}
+
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-12) var(--space-6);
+  border-radius: var(--radius-xl);
+  text-align: center;
+}
+
+.empty .note {
+  max-width: 46ch;
+  font-size: var(--text-base);
+}
+
+.emptyIcon {
+  color: var(--color-accent);
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--color-accent) 60%, transparent));
+}
+
+.emptyTitle {
+  font-size: var(--text-xl);
+}

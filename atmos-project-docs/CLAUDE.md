@@ -38,7 +38,11 @@ The app lives in `frontend/` (git root is the parent folder). Run these from `fr
 | `npm run format` / `npm run format:check` | Prettier write / check |
 | `npm test` | Vitest + React Testing Library, single run |
 | `npm run test:watch` | Vitest watch mode |
+| `npm run snapshots:record` | Records real Open-Meteo forecasts for the 12 cities in `scripts/snapshot-cities.json` into `public/snapshots/` (all-or-nothing; commit the result). Run a few times, and once right before release |
+| `npm run dev:snapshot` / `npm run build:snapshot` | Run or build in snapshot mode (`.env.snapshot`): serves the recorded files instead of calling the live API; search covers only recorded cities |
 | e2e | Not set up yet (Playwright arrives in a later phase) |
+
+npm on this machine needs the system proxy: see the Claude memory note, or set `HTTPS_PROXY=http://127.0.0.1:10808` for installs only.
 
 Source layout follows `docs/TRD.md` §2: `src/app`, `src/components/{ui,layout,feedback}`, `src/features/*`, `src/domain`, `src/lib/{api,config,formatting,query,schemas,storage}`, `src/styles`. Tests sit next to the code as `*.test.ts(x)`; test-only helpers live in `src/test/` and `*/testFixtures.ts` and must never be imported by app code.
 

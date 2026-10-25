@@ -1,0 +1,14 @@
+[
+  { "query": "London", "countryCode": "GB" },
+  { "query": "New York", "countryCode": "US" },
+  { "query": "Tokyo", "countryCode": "JP" },
+  { "query": "Sydney", "countryCode": "AU" },
+  { "query": "Paris", "countryCode": "FR" },
+  { "query": "Dubai", "countryCode": "AE" },
+  { "query": "Reykjavik", "countryCode": "IS" },
+  { "query": "Mumbai", "countryCode": "IN" },
+  { "query": "São Paulo", "countryCode": "BR" },
+  { "query": "Cairo", "countryCode": "EG" },
+  { "query": "Singapore", "countryCode": "SG" },
+  { "query": "Vancouver", "countryCode": "CA" }
+]

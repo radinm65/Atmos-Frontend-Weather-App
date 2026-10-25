@@ -1,4 +1,5 @@
 import { TriangleAlert } from 'lucide-react'
+import type { ReactNode } from 'react'
 import { Button } from '../ui/Button'
 import styles from './Feedback.module.css'
 
@@ -8,14 +9,22 @@ export interface ErrorStateProps {
   message: string
   /** When provided, a retry button is shown. */
   onRetry?: () => void
+  /** A different next step (for example choosing another place), when retrying cannot help. */
+  action?: ReactNode
 }
 
-export function ErrorState({ title = 'Something went wrong', message, onRetry }: ErrorStateProps) {
+export function ErrorState({
+  title = 'Something went wrong',
+  message,
+  onRetry,
+  action,
+}: ErrorStateProps) {
   return (
     <section className={`${styles.state} ${styles.error}`} role="alert">
       <TriangleAlert className={styles.errorIcon} aria-hidden="true" />
       <h2 className={styles.stateTitle}>{title}</h2>
       <p className={styles.stateText}>{message}</p>
+      {action ? <div className={styles.stateAction}>{action}</div> : null}
       {onRetry ? (
         <div className={styles.stateAction}>
           <Button onClick={onRetry}>Try again</Button>

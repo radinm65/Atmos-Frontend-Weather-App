@@ -3,7 +3,9 @@ import { ErrorState } from '../../components/feedback/ErrorState'
 import { LoadingState } from '../../components/feedback/LoadingState'
 import type { Location } from '../../domain/location'
 import type { WeatherReport } from '../../domain/weather'
-import { describeError } from '../../lib/api'
+import { Button } from '../../components/ui/Button'
+import { WeatherApiError, describeError } from '../../lib/api'
+import { useActiveLocation } from '../locations/useActiveLocation'
 import { FreshnessLabel } from './FreshnessLabel'
 import { useWeather } from './useWeather'
 
@@ -21,10 +23,25 @@ export interface WeatherQueryStateProps {
  */
 export function WeatherQueryState({ location, loading, children }: WeatherQueryStateProps) {
   const query = useWeather(location)
+  const { clearActiveLocation } = useActiveLocation()
 
   if (query.data === undefined) {
     if (query.isError) {
       const { title, message } = describeError(query.error)
+      // Retrying cannot help when the data source simply has nothing for this place.
+      if (query.error instanceof WeatherApiError && query.error.kind === 'not-available') {
+        return (
+          <ErrorState
+            title={title}
+            message={message}
+            action={
+              <Button variant="primary" onClick={clearActiveLocation}>
+                Choose another place
+              </Button>
+            }
+          />
+        )
+      }
       return <ErrorState title={title} message={message} onRetry={() => void query.refetch()} />
     }
     return loading ?? <LoadingState label={`Loading weather for ${location.name}`} lines={4} />

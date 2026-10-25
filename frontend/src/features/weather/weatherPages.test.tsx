@@ -174,6 +174,18 @@ describe('data states', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
 
+  it('offers "Choose another place" instead of a useless retry when the source has nothing for a place', async () => {
+    saveActiveLocation()
+    const getWeather = vi.fn().mockRejectedValue(new WeatherApiError('not-available', 'none'))
+    renderApp('/', { source: createFakeSource({ kind: 'snapshot', getWeather }).source })
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('No data for this place')
+    expect(screen.queryByRole('button', { name: 'Try again' })).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Choose another place' }))
+    expect(await screen.findByRole('heading', { name: 'Choose a location' })).toBeInTheDocument()
+  })
+
   it('keeps old data on screen, marked out of date, when a refresh fails', async () => {
     saveActiveLocation()
     const getWeather = vi

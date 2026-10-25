@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "capturedAt": "2026-10-25T13:50:55.055Z",
+  "locations": [
+    {
+      "location": {
+        "id": "om:2643743",
+        "name": "London",
+        "region": "England",
+        "country": "United Kingdom",
+        "latitude": 51.50853,
+        "longitude": -0.12574,
+        "timezone": "Europe/London"
+      },
+      "file": "om-2643743.json"
+    },
+    {
+      "location": {
+        "id": "om:5128581",
+        "name": "New York",
+        "region": "New York",
+        "country": "United States",
+        "latitude": 40.71427,
+        "longitude": -74.00597,
+        "timezone": "America/New_York"
+      },
+      "file": "om-5128581.json"
+    },
+    {
+      "location": {
+        "id": "om:1850147",
+        "name": "Tokyo",
+        "region": "Tokyo",
+        "country": "Japan",
+        "latitude": 35.6895,
+        "longitude": 139.69171,
+        "timezone": "Asia/Tokyo"
+      },
+      "file": "om-1850147.json"
+    },
+    {
+      "location": {
+        "id": "om:2147714",
+        "name": "Sydney",
+        "region": "New South Wales",
+        "country": "Australia",
+        "latitude": -33.86785,
+        "longitude": 151.20732,
+        "timezone": "Australia/Sydney"
+      },
+      "file": "om-2147714.json"
+    },
+    {
+      "location": {
+        "id": "om:2988507",
+        "name": "Paris",
+        "region": "Île-de-France Region",
+        "country": "France",
+        "latitude": 48.85341,
+        "longitude": 2.3488,
+        "timezone": "Europe/Paris"
+      },
+      "file": "om-2988507.json"
+    },
+    {
+      "location": {
+        "id": "om:292223",
+        "name": "Dubai",
+        "region": "Dubai",
+        "country": "United Arab Emirates",
+        "latitude": 25.07725,
+        "longitude": 55.30927,
+        "timezone": "Asia/Dubai"
+      },
+      "file": "om-292223.json"
+    },
+    {
+      "location": {
+        "id": "om:3413829",
+        "name": "Reykjavik",
+        "region": "Capital Region",
+        "country": "Iceland",
+        "latitude": 64.13548,
+        "longitude": -21.89541,
+        "timezone": "Atlantic/Reykjavik"
+      },
+      "file": "om-3413829.json"
+    },
+    {
+      "location": {
+        "id": "om:1275339",
+        "name": "Mumbai",
+        "region": "Maharashtra",
+        "country": "India",
+        "latitude": 19.07283,
+        "longitude": 72.88261,
+        "timezone": "Asia/Kolkata"
+      },
+      "file": "om-1275339.json"
+    },
+    {
+      "location": {
+        "id": "om:3448439",
+        "name": "São Paulo",
+        "region": "São Paulo",
+        "country": "Brazil",
+        "latitude": -23.5475,
+        "longitude": -46.63611,
+        "timezone": "America/Sao_Paulo"
+      },
+      "file": "om-3448439.json"
+    },
+    {
+      "location": {
+        "id": "om:360630",
+        "name": "Cairo",
+        "region": "Cairo Governorate",
+        "country": "Egypt",
+        "latitude": 30.06263,
+        "longitude": 31.24967,
+        "timezone": "Africa/Cairo"
+      },
+      "file": "om-360630.json"
+    },
+    {
+      "location": {
+        "id": "om:1880252",
+        "name": "Singapore",
+        "country": "Singapore",
+        "latitude": 1.28967,
+        "longitude": 103.85007,
+        "timezone": "Asia/Singapore"
+      },
+      "file": "om-1880252.json"
+    },
+    {
+      "location": {
+        "id": "om:6173331",
+        "name": "Vancouver",
+        "region": "British Columbia",
+        "country": "Canada",
+        "latitude": 49.24966,
+        "longitude": -123.11934,
+        "timezone": "America/Vancouver"
+      },
+      "file": "om-6173331.json"
+    }
+  ]
+}

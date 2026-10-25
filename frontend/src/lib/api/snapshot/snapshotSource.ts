@@ -1,36 +1,17 @@
-import { z } from 'zod'
 import type { Location } from '../../../domain/location'
-import { locationSchema } from '../../schemas/locationSchema'
 import type { WeatherDataSource } from '../dataSource'
 import { WeatherApiError, isAbortError } from '../errors'
 import { parseForecastResponse } from '../openMeteo/client'
 import { normalizeForecast } from '../openMeteo/normalize'
+import { manifestSchema, snapshotFileSchema } from './format'
 
 /**
  * Recorded snapshots of real Open-Meteo responses, served as static files (OPEN_DECISIONS D-18,
  * TRD §4a). Raw provider payloads are stored and pass through the same validation and
  * normalization as live data. Every report carries `source.kind === 'snapshot'` and the capture
  * time, so the UI can say plainly that this is recorded data and not current conditions.
- *
- * Layout under `<base>snapshots/`:
- *   manifest.json            { version, capturedAt, locations: [{ ...Location, file }] }
- *   <file>.json              { version, capturedAt, location, forecast: <raw forecast response> }
+ * The file format lives in ./format.ts and is written by scripts/record-snapshots.mjs.
  */
-
-const SNAPSHOT_VERSION = 1
-
-const manifestSchema = z.object({
-  version: z.literal(SNAPSHOT_VERSION),
-  capturedAt: z.string(),
-  locations: z.array(z.object({ location: locationSchema, file: z.string().min(1) })),
-})
-
-const snapshotFileSchema = z.object({
-  version: z.literal(SNAPSHOT_VERSION),
-  capturedAt: z.string(),
-  location: locationSchema,
-  forecast: z.unknown(),
-})
 
 export interface SnapshotSourceOptions {
   /** Directory the snapshot files are served from, with a trailing slash. */

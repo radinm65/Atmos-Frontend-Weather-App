@@ -15,7 +15,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "snapshots:record": "node scripts/record-snapshots.mjs",
+    "dev:snapshot": "vite --mode snapshot",
+    "build:snapshot": "tsc -b && vite build --mode snapshot"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.104.5",

@@ -54,6 +54,8 @@
     rgb(0 0 0 / 0)
   );
   --chrome-text-shadow: 0 1px 10px rgb(0 0 0 / 0.5);
+  /* The phone tab bar is translucent but not blurred (see AppShell.module.css). */
+  --tabbar-bg: rgb(14 16 20 / 0.9);
 
   /* Chart colours */
   --chart-temp: #ffb86b;
@@ -115,6 +117,7 @@
     transparent
   );
   --chrome-text-shadow: none;
+  --tabbar-bg: rgb(224 221 214 / 0.95);
 
   --chart-temp: #c25a06;
   --chart-feels: #6d4217;

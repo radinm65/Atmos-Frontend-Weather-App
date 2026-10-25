@@ -8,6 +8,8 @@
 
 .layer {
   position: absolute;
+  /* Override the global svg { max-width: 100% }: these layers are deliberately larger than the ring. */
+  max-width: none;
   overflow: visible;
   pointer-events: none;
 }

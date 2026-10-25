@@ -158,8 +158,13 @@
 }
 
 /*
- * Compact layout: primary navigation becomes a floating tab bar at the bottom. Unlike the header,
- * it keeps a glass background, because content scrolls underneath it.
+ * Compact layout: the tabs become a floating bar at the bottom of the screen.
+ *
+ * It is `position: sticky; bottom: 0` (not `fixed`), rendered directly in <body> after the app,
+ * and deliberately has no backdrop-filter or forced compositing layer. On iPhone browsers a fixed
+ * bar with those drifts away from the bottom edge while the toolbars collapse during scrolling.
+ * Sticky is kept in sync by the browser, and the bar is only translucent (not blurred) so text
+ * stays readable over the footage.
  */
 @media (max-width: 768px) {
   .header {
@@ -167,28 +172,28 @@
   }
 
   .nav {
-    position: fixed;
-    right: var(--space-3);
-    bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
-    left: var(--space-3);
+    position: sticky;
+    bottom: 0;
     z-index: 30;
-    padding: var(--space-1);
-    border-radius: var(--radius-full);
-    background: var(--glass-bg-strong);
-    border: 1px solid var(--glass-border);
-    box-shadow:
-      inset 0 1px 0 var(--glass-edge),
-      var(--glass-shadow);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    /* Own compositing layer so the bar stays put while the page scrolls underneath. */
-    transform: translateZ(0);
+    display: block;
+    flex: none;
+    padding: var(--space-2) var(--space-3) calc(var(--space-3) + env(safe-area-inset-bottom));
+    /* Only the pill itself takes taps; the strip around it lets them through. */
+    pointer-events: none;
   }
 
   .navList {
     width: 100%;
     justify-content: space-around;
     gap: 0;
+    padding: var(--space-1);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    background: var(--tabbar-bg);
+    box-shadow:
+      inset 0 1px 0 var(--glass-edge),
+      var(--glass-shadow);
+    pointer-events: auto;
   }
 
   .navList > li {

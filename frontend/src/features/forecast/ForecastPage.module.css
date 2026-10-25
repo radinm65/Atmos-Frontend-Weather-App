@@ -1,8 +1,51 @@
 .page {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-4);
+}
+
+.content {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--radius-xl);
 }
 
 .heading {
-  font-size: var(--text-2xl);
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -0.02em;
+}
+
+.place {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+.chartFallback {
+  min-height: 30rem;
+  border-radius: var(--radius-xl);
+}
+
+.tables {
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-xl);
+}
+
+.summary {
+  min-height: var(--touch-target);
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tables details[open] .summary {
+  margin-bottom: var(--space-3);
 }

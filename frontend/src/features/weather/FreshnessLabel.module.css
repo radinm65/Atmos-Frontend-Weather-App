@@ -7,16 +7,20 @@
 /* A small glass chip: how current the data is, in words. */
 .label {
   display: inline-flex;
-  flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
   border: 1px solid var(--glass-border);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-lg);
   background: var(--glass-bg);
   box-shadow: inset 0 1px 0 var(--glass-edge);
   color: var(--color-text-muted);
   font-size: var(--text-sm);
+}
+
+.label svg {
+  flex-shrink: 0;
+  margin-top: 0.2em;
 }
 
 .snapshot {

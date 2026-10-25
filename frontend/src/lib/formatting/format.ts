@@ -77,6 +77,21 @@ export function formatTime(iso: string, timeZone: string): string {
   }).format(date)
 }
 
+/** Short weekday and time in the given zone, e.g. "Sat 17:00". */
+export function formatWeekdayTime(iso: string, timeZone: string): string {
+  const date = toDate(iso)
+  if (!date) return MISSING
+  return new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  })
+    .format(date)
+    .replace(',', '')
+}
+
 /** Weekday, date and time in the given zone, e.g. "Sat 24 Oct, 17:00". */
 export function formatDateTime(iso: string, timeZone: string): string {
   const date = toDate(iso)

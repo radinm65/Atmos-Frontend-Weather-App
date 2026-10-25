@@ -13,7 +13,9 @@
 - CSS Modules and CSS custom properties
 - Recharts for charts
 - Leaflet for interactive maps
-- Lucide React for icons
+- Lucide React for UI icons and React Icons (Weather Icons set) for weather glyphs
+- Motion (`motion/react`) for animation, with `MotionConfig reducedMotion="user"`
+- Real looping video backdrops served from `public/backdrops/` (DESIGN_SPEC §9a)
 - Vitest + React Testing Library
 - Playwright for critical end-to-end flows
 - ESLint + Prettier

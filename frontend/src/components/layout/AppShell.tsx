@@ -22,7 +22,7 @@ export function AppShell() {
         </a>
 
         <header className={styles.headerWrap}>
-          <div className={`glass-strong ${styles.header}`}>
+          <div className={styles.header}>
             <NavLink to="/" className={styles.brand} aria-label="Atmos home">
               <WiDayCloudy size={34} aria-hidden="true" className={styles.logo} />
               <span>Atmos</span>

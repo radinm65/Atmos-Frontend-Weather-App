@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import type { HourlyForecast } from '../../domain/weather'
-import { summarizeTemperatureRows, summarizeWindRows, toChartRows } from './chartData'
+import {
+  summarizeSeries,
+  summarizeTemperatureRows,
+  summarizeWindRows,
+  toChartRows,
+} from './chartData'
 
 const hour = (iso: string, temperature: number | null, pop: number | null): HourlyForecast => ({
   time: iso,
@@ -36,6 +41,27 @@ describe('toChartRows', () => {
     expect(rows[0]?.temperature).toBe(50)
     expect(rows[2]?.temperature).toBeNull()
     expect(rows[2]?.feelsLike).toBeNull()
+  })
+})
+
+describe('summarizeSeries and long-range labels', () => {
+  it('summarizes any series in words', () => {
+    const rows = toChartRows(hours, 'Europe/Berlin', 'c')
+    expect(summarizeSeries(rows, 'rainChance', 'Chance of rain', (n) => `${n}%`)).toBe(
+      'Chance of rain is highest at 60% (16:00) and lowest at 0% (18:00).',
+    )
+  })
+
+  it('says so when a series has no values', () => {
+    const rows = toChartRows(hours, 'Europe/Berlin', 'c')
+    expect(summarizeSeries(rows, 'pressure', 'Pressure', String)).toBe(
+      'Pressure data is not available for this period.',
+    )
+  })
+
+  it('includes the weekday in labels for long ranges', () => {
+    const rows = toChartRows(hours, 'Europe/Berlin', 'c', 'kmh', true)
+    expect(rows[0]?.label).toBe('Sat 15:00')
   })
 })
 

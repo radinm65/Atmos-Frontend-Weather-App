@@ -28,7 +28,14 @@
   padding: var(--space-3) var(--space-4) 0;
 }
 
+/*
+ * The glass is painted by ::before, not by .header itself: an element with backdrop-filter becomes
+ * the containing block for position: fixed descendants, which would trap the mobile tab bar
+ * inside the header instead of pinning it to the viewport.
+ */
 .header {
+  position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
   gap: var(--space-4);
@@ -36,7 +43,23 @@
   min-height: var(--header-height);
   margin: 0 auto;
   padding: 0 var(--space-3) 0 var(--space-5);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-full);
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge),
+    var(--glass-shadow);
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.1), transparent 40%), var(--glass-bg-strong);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
 }
 
 .brand {

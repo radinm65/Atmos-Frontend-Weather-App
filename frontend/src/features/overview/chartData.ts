@@ -1,5 +1,10 @@
 import type { HourlyForecast } from '../../domain/weather'
-import { convertTemperature, convertWindSpeed, formatTime } from '../../lib/formatting'
+import {
+  convertTemperature,
+  convertWindSpeed,
+  formatTime,
+  formatWeekdayTime,
+} from '../../lib/formatting'
 import type { TemperatureUnit, WindSpeedUnit } from '../../lib/formatting'
 
 export interface ChartRow {
@@ -14,6 +19,8 @@ export interface ChartRow {
   windSpeed: number | null
   windGusts: number | null
   uvIndex: number | null
+  humidity: number | null
+  pressure: number | null
 }
 
 /** Rows for the charts: temperatures converted for display, everything else as provided. */
@@ -22,12 +29,14 @@ export function toChartRows(
   timezone: string,
   unit: TemperatureUnit,
   windUnit: WindSpeedUnit = 'kmh',
+  /** Include the weekday in labels, for ranges longer than about two days. */
+  withWeekday = false,
 ): ChartRow[] {
   const temp = (value: number | null) => (value === null ? null : convertTemperature(value, unit))
   const wind = (value: number | null) => (value === null ? null : convertWindSpeed(value, windUnit))
   return hours.map((hour) => ({
     time: hour.time,
-    label: formatTime(hour.time, timezone),
+    label: withWeekday ? formatWeekdayTime(hour.time, timezone) : formatTime(hour.time, timezone),
     temperature: temp(hour.temperature),
     feelsLike: temp(hour.feelsLike),
     rainChance: hour.precipitationProbability,
@@ -35,7 +44,28 @@ export function toChartRows(
     windSpeed: wind(hour.windSpeed),
     windGusts: wind(hour.windGusts),
     uvIndex: hour.uvIndex,
+    humidity: hour.humidity,
+    pressure: hour.pressure,
   }))
+}
+
+type NumericKey = {
+  [K in keyof ChartRow]: ChartRow[K] extends number | null ? K : never
+}[keyof ChartRow]
+
+/** Text equivalent for any single-series chart: where it peaks and where it is lowest. */
+export function summarizeSeries(
+  rows: readonly ChartRow[],
+  key: NumericKey,
+  noun: string,
+  format: (value: number) => string,
+): string {
+  const known = rows.filter((row) => row[key] !== null)
+  if (known.length === 0) return `${noun} data is not available for this period.`
+  const value = (row: ChartRow) => row[key] as number
+  const high = known.reduce((a, b) => (value(b) > value(a) ? b : a))
+  const low = known.reduce((a, b) => (value(b) < value(a) ? b : a))
+  return `${noun} is highest at ${format(value(high))} (${high.label}) and lowest at ${format(value(low))} (${low.label}).`
 }
 
 /** A text equivalent of the wind chart. */

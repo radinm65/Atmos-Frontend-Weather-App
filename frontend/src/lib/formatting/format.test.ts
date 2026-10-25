@@ -15,6 +15,7 @@ import {
   formatTime,
   formatUv,
   formatWeekday,
+  formatWeekdayTime,
   formatWindSpeed,
   toLocalDate,
 } from './index'
@@ -98,6 +99,12 @@ describe('time formatting', () => {
   it('uses the given time zone, not the browser zone', () => {
     expect(formatTime(instant, 'Europe/Berlin')).toBe('17:00')
     expect(formatTime(instant, 'America/Los_Angeles')).toBe('08:00')
+  })
+
+  it('formats a short weekday and time in the zone', () => {
+    expect(formatWeekdayTime(instant, 'Europe/Berlin')).toBe('Sat 17:00')
+    expect(formatWeekdayTime(instant, 'Pacific/Auckland')).toBe('Sun 04:00')
+    expect(formatWeekdayTime('nope', 'Europe/Berlin')).toBe(MISSING)
   })
 
   it('formats a zoned date and time', () => {

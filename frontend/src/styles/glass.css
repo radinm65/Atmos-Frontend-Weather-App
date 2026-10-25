@@ -5,10 +5,14 @@
  * edge, a hairline border, and a soft diagonal sheen. Where `backdrop-filter` is unsupported the
  * tint alone is opaque enough to keep text readable.
  */
+/* Zero specificity (:where), so a component can still be absolute/fixed/sticky and stay glass. */
+:where(.glass, .glass-strong, .glass-pill) {
+  position: relative;
+}
+
 .glass,
 .glass-strong,
 .glass-pill {
-  position: relative;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow:

@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
-import { EmptyState } from '../feedback/EmptyState'
+import { GlassPanel } from '../ui/GlassPanel'
 import styles from './RoutePlaceholder.module.css'
 
 export interface RoutePlaceholderProps {
@@ -16,11 +16,21 @@ export function RoutePlaceholder({ title, summary, icon: Icon }: RoutePlaceholde
   return (
     <div className={styles.page}>
       <h1 className={styles.heading}>{title}</h1>
-      <EmptyState
-        icon={<Icon size={32} />}
-        title="Coming soon"
-        description={`${summary} This page is a placeholder while Atmos is being built.`}
-      />
+      <GlassPanel
+        as="section"
+        strong
+        interactive={false}
+        initial="hidden"
+        animate="visible"
+        className={styles.card}
+        aria-label="Coming soon"
+      >
+        <Icon size={44} aria-hidden="true" className={styles.icon} />
+        <h2 className={styles.cardTitle}>Coming soon</h2>
+        <p className={styles.text}>
+          {summary} This page is a placeholder while Atmos is being built.
+        </p>
+      </GlassPanel>
     </div>
   )
 }

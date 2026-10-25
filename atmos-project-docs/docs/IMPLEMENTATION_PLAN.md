@@ -80,14 +80,13 @@ Exit criteria:
 
 **Goal:** Deliver the main polished weather pages.
 
-Tasks (the owner wants this phase to feel beautiful and interactive, so it is worked as small steps with a commit each; see `DESIGN_SPEC.md` §9a):
-- **3a — Visual foundation:** final fonts (D-04), refined tokens, and motion rules.
-- **3b — Sky engine:** a lazily loaded, procedural sky scene driven by local time, sunrise/sunset and condition (sun/moon arc, stars, clouds, rain, snow, fog, lightning), with reduced-motion and tab-hidden handling. Add sunrise/sunset to the data layer.
-- **3c — Overview hero:** the sky as the hero with current conditions on top, a time scrubber over the hourly forecast that drives the sky, key metric groups and forecast highlights.
-- **3d — Forecast views:** polished hourly and daily views, with charts only where they help comprehension (Recharts, lazily loaded).
-- **3e — Polish and validation:** both themes, mobile layouts, accessibility checks, and stable layouts while loading.
-- Photography is optional (D-13 not needed); no images ship unless the owner adds them.
-
+Tasks (the owner wants this phase to feel beautiful, alive and information-rich; see `DESIGN_SPEC.md` §9a):
+- **3a, visual foundation (done):** self-hosted Inter and Fraunces, neutral liquid-glass tokens for both themes, motion rules.
+- **3b, live wallpaper (done):** eight real looping weather videos with posters, the scene-mapping module, a crossfading full-screen backdrop with reduced-motion, data-saver and failure fallbacks. (An earlier hand-drawn procedural sky was built, judged to look fake, and removed.)
+- **3c, glass shell (done):** floating glass header with an animated nav indicator, floating bottom tab bar on mobile, glass footer, buttons, inputs and search.
+- **3d, Overview (done):** hero with animated temperature and weather icon, 24-hour strip, 10-day range bars, interactive temperature and wind charts, and nine widgets (wind compass, humidity, UV, pressure, sun arc, precipitation, visibility, cloud cover, air quality). The data layer was extended for these (UV, pressure, gusts, visibility, dew point, daily extremes, an air-quality source).
+- **3e, Forecast (done):** hourly strip, tabbed chart explorer (temperature, rain, wind, UV, humidity, pressure over 24 h, 48 h or 7 days), 10-day list, and data tables as the text equivalent.
+- **Still to do in this phase:** an accessibility pass in a real browser (keyboard order, contrast over every scene in both themes), a bundle-size check, and the owner's review of the visual design. Units toggle and saved locations stay in Phase 4.
 Exit criteria:
 - Overview and forecast use real provider data.
 - No mock values appear as live weather.

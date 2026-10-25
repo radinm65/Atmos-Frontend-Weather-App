@@ -98,18 +98,12 @@
   }
 
   .main {
-    grid-template-columns: 1fr;
+    gap: var(--space-3);
   }
 
-  .bigIcon {
-    position: absolute;
-    top: 4.5rem;
-    right: -1rem;
-    opacity: 0.55;
-  }
-
+  /* Keep the big glyph beside the temperature instead of over the text. */
   .bigIcon svg {
-    width: 9rem;
-    height: 9rem;
+    width: 6.5rem;
+    height: 6.5rem;
   }
 }

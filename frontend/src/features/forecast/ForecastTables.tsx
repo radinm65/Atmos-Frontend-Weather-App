@@ -26,7 +26,7 @@ export function ForecastTables({ report }: { report: WeatherReport }) {
     <>
       <section aria-labelledby="hourly-heading" className={styles.section}>
         <h2 id="hourly-heading" className={styles.heading}>
-          Next {hours.length} hours
+          Hourly data table
         </h2>
         {/* Scrollable regions must be keyboard-focusable so keyboard users can scroll them. */}
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
@@ -61,7 +61,7 @@ export function ForecastTables({ report }: { report: WeatherReport }) {
 
       <section aria-labelledby="daily-heading" className={styles.section}>
         <h2 id="daily-heading" className={styles.heading}>
-          {report.daily.length}-day forecast
+          Daily data table
         </h2>
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
         <div className={styles.scroll} tabIndex={0} role="region" aria-labelledby="daily-heading">

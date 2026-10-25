@@ -1,10 +1,10 @@
 # Atmos
 
-Atmos is a portfolio-grade weather web application with a cinematic photographic visual direction and a structured, data-rich dashboard.
+Atmos is a portfolio-grade weather web application with a cinematic live-wallpaper visual direction (real weather footage behind a liquid-glass interface) and a structured, data-rich dashboard.
 
 ## Current product decisions
 
-- **Visual direction:** Cinematic Sky, a live interactive procedural sky (changed from photography by the owner on 2026-10-24; photography is optional)
+- **Visual direction:** Cinematic live wallpaper: real looping weather video full-screen behind a liquid-glass interface (changed from photography, then from a drawn sky, by the owner on 2026-10-25)
 - **Layout:** Hybrid — cinematic weather hero plus structured dashboard
 - **Themes:** Light and dark
 - **MVP:** Current conditions, forecasts, city search, saved locations, city comparison, interactive weather map, and AI weather assistant

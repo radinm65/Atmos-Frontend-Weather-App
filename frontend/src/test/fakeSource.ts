@@ -1,10 +1,11 @@
 import { vi } from 'vitest'
+import type { AirQualityReport } from '../domain/airQuality'
 import type { Location } from '../domain/location'
 import type { WeatherReport } from '../domain/weather'
 import type { WeatherDataSource } from '../lib/api'
-import { normalizeForecast } from '../lib/api/openMeteo/normalize'
-import { forecastResponseSchema } from '../lib/api/openMeteo/schemas'
-import { berlin, forecastFixture } from '../lib/api/openMeteo/testFixtures'
+import { normalizeAirQuality, normalizeForecast } from '../lib/api/openMeteo/normalize'
+import { airQualityResponseSchema, forecastResponseSchema } from '../lib/api/openMeteo/schemas'
+import { airQualityFixture, berlin, forecastFixture } from '../lib/api/openMeteo/testFixtures'
 
 /** TEST-ONLY. Fixture-backed data source with spies; never used by the running app. */
 
@@ -26,6 +27,14 @@ export function fixtureReport(location: Location = berlin): WeatherReport {
   )
 }
 
+export function fixtureAirQuality(): AirQualityReport {
+  return normalizeAirQuality(
+    airQualityResponseSchema.parse(airQualityFixture()),
+    { kind: 'live' },
+    new Date().toISOString(),
+  )
+}
+
 export function createFakeSource(overrides: Partial<WeatherDataSource> = {}) {
   const searchLocations = vi.fn<WeatherDataSource['searchLocations']>((query) =>
     Promise.resolve(query.toLowerCase().includes('berlin') ? [berlin, berlinNewHampshire] : []),
@@ -33,6 +42,15 @@ export function createFakeSource(overrides: Partial<WeatherDataSource> = {}) {
   const getWeather = vi.fn<WeatherDataSource['getWeather']>((location) =>
     Promise.resolve(fixtureReport(location)),
   )
-  const source: WeatherDataSource = { kind: 'live', searchLocations, getWeather, ...overrides }
-  return { source, searchLocations, getWeather }
+  const getAirQuality = vi.fn<WeatherDataSource['getAirQuality']>(() =>
+    Promise.resolve(fixtureAirQuality()),
+  )
+  const source: WeatherDataSource = {
+    kind: 'live',
+    searchLocations,
+    getWeather,
+    getAirQuality,
+    ...overrides,
+  }
+  return { source, searchLocations, getWeather, getAirQuality }
 }

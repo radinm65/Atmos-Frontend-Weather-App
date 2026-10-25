@@ -1,3 +1,4 @@
+import type { AirQualityReport } from '../../domain/airQuality'
 import type { Location } from '../../domain/location'
 import type { DataSourceKind, WeatherReport } from '../../domain/weather'
 
@@ -18,4 +19,7 @@ export interface WeatherDataSource {
 
   /** Current conditions and forecasts for a place. */
   getWeather(location: Location, context?: RequestContext): Promise<WeatherReport>
+
+  /** Air quality for a place. Optional widget data: a failure must not blank the page. */
+  getAirQuality(location: Location, context?: RequestContext): Promise<AirQualityReport>
 }

@@ -33,7 +33,13 @@ export const forecastResponseSchema = z.object({
     apparent_temperature: maybeNumber,
     relative_humidity_2m: maybeNumber,
     wind_speed_10m: maybeNumber,
+    wind_gusts_10m: maybeNumber,
+    wind_direction_10m: maybeNumber,
     precipitation: maybeNumber,
+    pressure_msl: maybeNumber,
+    uv_index: maybeNumber,
+    visibility: maybeNumber,
+    dew_point_2m: maybeNumber,
     cloud_cover: maybeNumber,
     weather_code: maybeNumber,
     is_day: maybeNumber,
@@ -41,10 +47,16 @@ export const forecastResponseSchema = z.object({
   hourly: z.object({
     time: z.array(z.number()),
     temperature_2m: numberSeries,
+    apparent_temperature: numberSeries,
+    relative_humidity_2m: numberSeries,
     precipitation_probability: numberSeries,
+    precipitation: numberSeries,
     weather_code: numberSeries,
     cloud_cover: numberSeries,
     wind_speed_10m: numberSeries,
+    wind_gusts_10m: numberSeries,
+    pressure_msl: numberSeries,
+    uv_index: numberSeries,
     is_day: numberSeries,
   }),
   daily: z.object({
@@ -53,13 +65,38 @@ export const forecastResponseSchema = z.object({
     temperature_2m_min: numberSeries,
     precipitation_probability_max: numberSeries,
     precipitation_sum: numberSeries,
+    precipitation_hours: numberSeries,
     weather_code: numberSeries,
+    uv_index_max: numberSeries,
+    wind_speed_10m_max: numberSeries,
+    wind_gusts_10m_max: numberSeries,
+    daylight_duration: numberSeries,
+    sunshine_duration: numberSeries,
     // Unix seconds because the request uses timeformat=unixtime.
     sunrise: numberSeries,
     sunset: numberSeries,
   }),
 })
 
+export const airQualityResponseSchema = z.object({
+  current: z.object({
+    time: z.number(),
+    us_aqi: maybeNumber,
+    european_aqi: maybeNumber,
+    pm2_5: maybeNumber,
+    pm10: maybeNumber,
+    ozone: maybeNumber,
+    nitrogen_dioxide: maybeNumber,
+    sulphur_dioxide: maybeNumber,
+    carbon_monoxide: maybeNumber,
+  }),
+  hourly: z.object({
+    time: z.array(z.number()),
+    us_aqi: numberSeries,
+  }),
+})
+
 export type GeocodingResult = z.infer<typeof geocodingResultSchema>
 export type GeocodingResponse = z.infer<typeof geocodingResponseSchema>
 export type ForecastResponse = z.infer<typeof forecastResponseSchema>
+export type AirQualityResponse = z.infer<typeof airQualityResponseSchema>

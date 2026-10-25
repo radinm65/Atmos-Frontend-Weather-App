@@ -1,7 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createDataSource } from './index'
 import { createLiveSource } from './openMeteo/liveSource'
-import { berlin, forecastFixture, geocodingFixture } from './openMeteo/testFixtures'
+import {
+  airQualityFixture,
+  berlin,
+  forecastFixture,
+  geocodingFixture,
+} from './openMeteo/testFixtures'
 import { createSnapshotSource } from './snapshot/snapshotSource'
 
 function json(body: unknown, status = 200): Response {
@@ -24,7 +29,26 @@ describe('live source', () => {
   })
 })
 
+describe('live source air quality', () => {
+  it('returns a live air-quality report from the air-quality endpoint', async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(json(airQualityFixture()))
+    const report = await createLiveSource(fetchImpl).getAirQuality(berlin)
+    expect(report.usAqi).toBe(29)
+    expect(report.source).toEqual({ kind: 'live' })
+    expect(String(fetchImpl.mock.calls[0]?.[0])).toContain('air-quality-api.open-meteo.com')
+  })
+})
+
 describe('snapshot source', () => {
+  it('has no recorded air quality, and says so', async () => {
+    const error = await createSnapshotSource({ baseUrl: '/snapshots/' })
+      .getAirQuality(berlin)
+      .catch((e: unknown) => e)
+    expect(error).toMatchObject({ kind: 'not-available' })
+  })
+})
+
+describe('snapshot source files', () => {
   const capturedAt = '2026-10-24T16:05:00.000Z'
   const manifest = {
     version: 1,

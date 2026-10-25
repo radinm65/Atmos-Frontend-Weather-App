@@ -91,6 +91,13 @@ export function createSnapshotSource(options: SnapshotSourceOptions = {}): Weath
         .filter((location) => location.name.toLowerCase().includes(needle))
     },
 
+    /** Air quality is not part of the recorded snapshots. */
+    getAirQuality(location: Location) {
+      return Promise.reject(
+        new WeatherApiError('not-available', `No recorded air quality for ${location.id}`),
+      )
+    },
+
     async getWeather(location: Location, context) {
       const manifest = await loadManifest(context?.signal)
       const entry = manifest.locations.find((candidate) => candidate.location.id === location.id)

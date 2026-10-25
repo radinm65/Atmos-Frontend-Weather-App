@@ -1,8 +1,20 @@
 import { describe, expect, it } from 'vitest'
-import { forecastResponseSchema, geocodingResponseSchema } from './schemas'
-import { normalizeForecast, normalizeGeocoding } from './normalize'
+import { aqiCategory } from '../../../domain/airQuality'
+import {
+  airQualityResponseSchema,
+  forecastResponseSchema,
+  geocodingResponseSchema,
+} from './schemas'
+import { normalizeAirQuality, normalizeForecast, normalizeGeocoding } from './normalize'
 import { conditionFromCode } from './wmo'
-import { CURRENT_TIME, DAY_1, berlin, forecastFixture, geocodingFixture } from './testFixtures'
+import {
+  CURRENT_TIME,
+  DAY_1,
+  airQualityFixture,
+  berlin,
+  forecastFixture,
+  geocodingFixture,
+} from './testFixtures'
 
 const source = { kind: 'live' } as const
 const fetchedAt = '2026-10-24T16:01:00.000Z'
@@ -66,6 +78,38 @@ describe('normalizeForecast', () => {
     expect(report.current.cloudCover).toBe(100)
     expect(report.hourly[1]).toMatchObject({ cloudCover: 92, windSpeed: 14 })
     expect(report.hourly[2]).toMatchObject({ cloudCover: null, windSpeed: null })
+  })
+
+  it('maps the extra current measurements (wind, pressure, UV, visibility, dew point)', () => {
+    expect(normalize().current).toMatchObject({
+      windGusts: 45.4,
+      windDirection: 202,
+      pressure: 996.4,
+      uvIndex: 0.45,
+      visibility: 25120,
+      dewPoint: 7.8,
+    })
+  })
+
+  it('maps hourly and daily detail, keeping gaps as null', () => {
+    const { hourly, daily } = normalize()
+    expect(hourly[1]).toMatchObject({
+      feelsLike: 9.5,
+      humidity: 85,
+      precipitation: 0.4,
+      windGusts: 33,
+      pressure: 996.8,
+      uvIndex: 0.2,
+    })
+    expect(hourly[2]).toMatchObject({ feelsLike: null, precipitation: null, uvIndex: null })
+    expect(daily[0]).toMatchObject({
+      uvIndexMax: 1.3,
+      windSpeedMax: 23.9,
+      windGustsMax: 52.6,
+      precipitationHours: 6,
+      sunshineSeconds: 13203.4,
+    })
+    expect(daily[2]).toMatchObject({ uvIndexMax: null, daylightSeconds: null })
   })
 
   it('maps sunrise and sunset as UTC instants, keeping missing ones null', () => {
@@ -134,6 +178,52 @@ describe('normalizeGeocoding', () => {
     expect(normalizeGeocoding(geocodingResponseSchema.parse({ generationtime_ms: 0.2 }))).toEqual(
       [],
     )
+  })
+})
+
+describe('normalizeAirQuality', () => {
+  it('maps pollutants and the hourly index, keeping gaps as null', () => {
+    const report = normalizeAirQuality(
+      airQualityResponseSchema.parse(airQualityFixture()),
+      { kind: 'live' },
+      fetchedAt,
+    )
+    expect(report).toMatchObject({
+      usAqi: 29,
+      europeanAqi: 22,
+      pm25: 1.1,
+      pm10: 1.7,
+      ozone: 63,
+      nitrogenDioxide: 5.3,
+      sulphurDioxide: 0.7,
+      carbonMonoxide: 154,
+      fetchedAt,
+      source: { kind: 'live' },
+    })
+    expect(report.hourly).toEqual([
+      { time: new Date(CURRENT_TIME * 1000).toISOString(), usAqi: 29 },
+      { time: new Date((CURRENT_TIME + 3600) * 1000).toISOString(), usAqi: null },
+    ])
+  })
+
+  it('treats missing pollutants as null, not zero', () => {
+    const report = normalizeAirQuality(
+      airQualityResponseSchema.parse({ current: { time: CURRENT_TIME }, hourly: { time: [] } }),
+      { kind: 'live' },
+      fetchedAt,
+    )
+    expect(report.usAqi).toBeNull()
+    expect(report.pm25).toBeNull()
+  })
+
+  it('classifies US AQI bands', () => {
+    expect(aqiCategory(29)).toBe('good')
+    expect(aqiCategory(50)).toBe('good')
+    expect(aqiCategory(51)).toBe('moderate')
+    expect(aqiCategory(120)).toBe('sensitive')
+    expect(aqiCategory(180)).toBe('unhealthy')
+    expect(aqiCategory(250)).toBe('very-unhealthy')
+    expect(aqiCategory(400)).toBe('hazardous')
   })
 })
 

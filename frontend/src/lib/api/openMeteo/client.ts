@@ -1,7 +1,11 @@
 import type { Location } from '../../../domain/location'
 import { WeatherApiError, isAbortError } from '../errors'
-import { forecastResponseSchema, geocodingResponseSchema } from './schemas'
-import type { ForecastResponse, GeocodingResponse } from './schemas'
+import {
+  airQualityResponseSchema,
+  forecastResponseSchema,
+  geocodingResponseSchema,
+} from './schemas'
+import type { AirQualityResponse, ForecastResponse, GeocodingResponse } from './schemas'
 
 /**
  * Open-Meteo HTTP client (keyless; calls go straight from the browser, D-05/D-06).
@@ -10,6 +14,7 @@ import type { ForecastResponse, GeocodingResponse } from './schemas'
 
 const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast'
 const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search'
+const AIR_QUALITY_URL = 'https://air-quality-api.open-meteo.com/v1/air-quality'
 
 /** Days of forecast requested. The UI must show what the provider actually returns. */
 export const FORECAST_DAYS = 10
@@ -25,18 +30,79 @@ export function buildForecastUrl(latitude: number, longitude: number): string {
   const params = new URLSearchParams({
     latitude: String(latitude),
     longitude: String(longitude),
-    current:
-      'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,cloud_cover,weather_code,wind_speed_10m',
-    hourly:
-      'temperature_2m,precipitation_probability,weather_code,cloud_cover,wind_speed_10m,is_day',
-    daily:
-      'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,sunrise,sunset',
+    current: [
+      'temperature_2m',
+      'apparent_temperature',
+      'relative_humidity_2m',
+      'dew_point_2m',
+      'is_day',
+      'precipitation',
+      'cloud_cover',
+      'weather_code',
+      'pressure_msl',
+      'visibility',
+      'uv_index',
+      'wind_speed_10m',
+      'wind_gusts_10m',
+      'wind_direction_10m',
+    ].join(','),
+    hourly: [
+      'temperature_2m',
+      'apparent_temperature',
+      'relative_humidity_2m',
+      'precipitation_probability',
+      'precipitation',
+      'weather_code',
+      'cloud_cover',
+      'wind_speed_10m',
+      'wind_gusts_10m',
+      'pressure_msl',
+      'uv_index',
+      'is_day',
+    ].join(','),
+    daily: [
+      'weather_code',
+      'temperature_2m_max',
+      'temperature_2m_min',
+      'precipitation_probability_max',
+      'precipitation_sum',
+      'precipitation_hours',
+      'uv_index_max',
+      'wind_speed_10m_max',
+      'wind_gusts_10m_max',
+      'daylight_duration',
+      'sunshine_duration',
+      'sunrise',
+      'sunset',
+    ].join(','),
     // Resolve the location's own zone and return UTC instants, so no browser-zone guessing.
     timezone: 'auto',
     timeformat: 'unixtime',
     forecast_days: String(FORECAST_DAYS),
   })
   return `${FORECAST_URL}?${params.toString()}`
+}
+
+export function buildAirQualityUrl(latitude: number, longitude: number): string {
+  const params = new URLSearchParams({
+    latitude: String(latitude),
+    longitude: String(longitude),
+    current: [
+      'us_aqi',
+      'european_aqi',
+      'pm2_5',
+      'pm10',
+      'ozone',
+      'nitrogen_dioxide',
+      'sulphur_dioxide',
+      'carbon_monoxide',
+    ].join(','),
+    hourly: 'us_aqi',
+    timezone: 'auto',
+    timeformat: 'unixtime',
+    forecast_days: '2',
+  })
+  return `${AIR_QUALITY_URL}?${params.toString()}`
 }
 
 export function buildGeocodingUrl(query: string, count: number): string {
@@ -109,4 +175,22 @@ export async function fetchForecast(
 ): Promise<ForecastResponse> {
   const url = buildForecastUrl(location.latitude, location.longitude)
   return parseForecastResponse(await requestJson(url, options))
+}
+
+export function parseAirQualityResponse(json: unknown): AirQualityResponse {
+  const parsed = airQualityResponseSchema.safeParse(json)
+  if (!parsed.success) {
+    throw new WeatherApiError('invalid-response', 'Unexpected air quality response', {
+      cause: parsed.error,
+    })
+  }
+  return parsed.data
+}
+
+export async function fetchAirQuality(
+  location: Pick<Location, 'latitude' | 'longitude'>,
+  options: RequestOptions = {},
+): Promise<AirQualityResponse> {
+  const url = buildAirQualityUrl(location.latitude, location.longitude)
+  return parseAirQualityResponse(await requestJson(url, options))
 }

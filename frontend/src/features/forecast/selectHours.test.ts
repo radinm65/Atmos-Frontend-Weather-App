@@ -5,10 +5,16 @@ import { selectHours } from './selectHours'
 const hour = (iso: string): HourlyForecast => ({
   time: iso,
   temperature: 10,
+  feelsLike: null,
+  humidity: null,
   precipitationProbability: null,
+  precipitation: null,
   condition: null,
   cloudCover: null,
   windSpeed: null,
+  windGusts: null,
+  pressure: null,
+  uvIndex: null,
   isDay: null,
 })
 

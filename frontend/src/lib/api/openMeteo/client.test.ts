@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { WeatherApiError, describeError } from '../errors'
 import {
   FORECAST_DAYS,
+  buildAirQualityUrl,
   buildForecastUrl,
   buildGeocodingUrl,
   fetchForecast,
@@ -34,6 +35,23 @@ describe('URL builders', () => {
     const url = new URL(buildForecastUrl(1, 2))
     expect(url.searchParams.has('temperature_unit')).toBe(false)
     expect(url.searchParams.has('wind_speed_unit')).toBe(false)
+  })
+
+  it('requests the extra weather variables used by the dashboard', () => {
+    const url = new URL(buildForecastUrl(52.5, 13.4))
+    for (const name of ['uv_index', 'visibility', 'pressure_msl', 'wind_direction_10m']) {
+      expect(url.searchParams.get('current')).toContain(name)
+    }
+    expect(url.searchParams.get('daily')).toContain('uv_index_max')
+    expect(url.searchParams.get('hourly')).toContain('apparent_temperature')
+  })
+
+  it('builds an air-quality URL with unix times and the location time zone', () => {
+    const url = new URL(buildAirQualityUrl(52.5, 13.4))
+    expect(url.origin + url.pathname).toBe('https://air-quality-api.open-meteo.com/v1/air-quality')
+    expect(url.searchParams.get('current')).toContain('us_aqi')
+    expect(url.searchParams.get('timeformat')).toBe('unixtime')
+    expect(url.searchParams.get('timezone')).toBe('auto')
   })
 
   it('encodes the geocoding query', () => {

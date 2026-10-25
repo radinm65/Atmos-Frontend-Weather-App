@@ -1,3 +1,4 @@
+import type { AirQualityReport } from '../../../domain/airQuality'
 import type { Location } from '../../../domain/location'
 import type {
   DailyForecast,
@@ -7,7 +8,7 @@ import type {
   WeatherReport,
 } from '../../../domain/weather'
 import { toLocalDate } from '../../formatting'
-import type { ForecastResponse, GeocodingResponse } from './schemas'
+import type { AirQualityResponse, ForecastResponse, GeocodingResponse } from './schemas'
 import { conditionFromCode } from './wmo'
 
 const toIso = (unixSeconds: number): string => new Date(unixSeconds * 1000).toISOString()
@@ -46,6 +47,31 @@ export function normalizeGeocoding(response: GeocodingResponse): Location[] {
   }))
 }
 
+export function normalizeAirQuality(
+  response: AirQualityResponse,
+  source: DataSourceInfo,
+  fetchedAt: string,
+): AirQualityReport {
+  const { current, hourly } = response
+  return {
+    usAqi: current.us_aqi ?? null,
+    europeanAqi: current.european_aqi ?? null,
+    pm25: current.pm2_5 ?? null,
+    pm10: current.pm10 ?? null,
+    ozone: current.ozone ?? null,
+    nitrogenDioxide: current.nitrogen_dioxide ?? null,
+    sulphurDioxide: current.sulphur_dioxide ?? null,
+    carbonMonoxide: current.carbon_monoxide ?? null,
+    hourly: hourly.time.map((time, index) => ({
+      time: toIso(time),
+      usAqi: at(hourly.us_aqi, index),
+    })),
+    observedAt: toIso(current.time),
+    fetchedAt,
+    source,
+  }
+}
+
 export function normalizeForecast(
   response: ForecastResponse,
   location: Location,
@@ -57,10 +83,16 @@ export function normalizeForecast(
   const hourlyForecast: HourlyForecast[] = hourly.time.map((time, index) => ({
     time: toIso(time),
     temperature: at(hourly.temperature_2m, index),
+    feelsLike: at(hourly.apparent_temperature, index),
+    humidity: at(hourly.relative_humidity_2m, index),
     precipitationProbability: at(hourly.precipitation_probability, index),
+    precipitation: at(hourly.precipitation, index),
     condition: conditionAt(hourly.weather_code, index),
     cloudCover: at(hourly.cloud_cover, index),
     windSpeed: at(hourly.wind_speed_10m, index),
+    windGusts: at(hourly.wind_gusts_10m, index),
+    pressure: at(hourly.pressure_msl, index),
+    uvIndex: at(hourly.uv_index, index),
     isDay: toIsDay(at(hourly.is_day, index)),
   }))
 
@@ -75,8 +107,14 @@ export function normalizeForecast(
       condition: conditionAt(daily.weather_code, index),
       precipitationProbability: at(daily.precipitation_probability_max, index),
       precipitationSum: at(daily.precipitation_sum, index),
+      precipitationHours: at(daily.precipitation_hours, index),
+      uvIndexMax: at(daily.uv_index_max, index),
+      windSpeedMax: at(daily.wind_speed_10m_max, index),
+      windGustsMax: at(daily.wind_gusts_10m_max, index),
       sunrise: isoAt(daily.sunrise, index),
       sunset: isoAt(daily.sunset, index),
+      daylightSeconds: at(daily.daylight_duration, index),
+      sunshineSeconds: at(daily.sunshine_duration, index),
     })
   })
 
@@ -90,7 +128,13 @@ export function normalizeForecast(
       condition: conditionFromCode(current.weather_code),
       humidity: current.relative_humidity_2m ?? null,
       windSpeed: current.wind_speed_10m ?? null,
+      windGusts: current.wind_gusts_10m ?? null,
+      windDirection: current.wind_direction_10m ?? null,
       precipitation: current.precipitation ?? null,
+      pressure: current.pressure_msl ?? null,
+      uvIndex: current.uv_index ?? null,
+      visibility: current.visibility ?? null,
+      dewPoint: current.dew_point_2m ?? null,
       cloudCover: current.cloud_cover ?? null,
       isDay: toIsDay(current.is_day),
       observedAt: toIso(current.time),

@@ -8,4 +8,6 @@ export const queryKeys = {
   locationSearch: (source: DataSourceKind, query: string) =>
     ['location-search', source, query.trim().toLowerCase()] as const,
   weather: (source: DataSourceKind, locationId: string) => ['weather', source, locationId] as const,
+  airQuality: (source: DataSourceKind, locationId: string) =>
+    ['air-quality', source, locationId] as const,
 }

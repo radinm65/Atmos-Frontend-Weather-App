@@ -30,6 +30,7 @@ function post(body: unknown, headers: Record<string, string> = {}, raw?: string)
 function fakeProvider(answer: () => Promise<string>): AssistantProvider & { calls: unknown[] } {
   const calls: unknown[] = []
   return {
+    id: 'anthropic',
     model: 'fake',
     calls,
     answer: (input) => {
@@ -60,7 +61,7 @@ describe('configuration (the assistant ships disabled)', () => {
     const off = await handleAssistantRequest(new Request(URL_), {})
     expect(await off.json()).toEqual({ enabled: false })
     const on = await handleAssistantRequest(new Request(URL_), enabledEnv)
-    expect(await on.json()).toEqual({ enabled: true })
+    expect(await on.json()).toEqual({ enabled: true, provider: 'anthropic' })
     expect(
       JSON.stringify(await (await handleAssistantRequest(new Request(URL_), enabledEnv)).text()),
     ).not.toContain(SECRET)
@@ -251,7 +252,9 @@ describe('answering', () => {
     expect(await limited.json()).toMatchObject({ error: { code: 'rate-limited' } })
 
     expect((await send('2.2.2.2')).status).toBe(200)
-    expect((await send('3.3.3.3')).status).toBe(429) // the shared daily cap is used up
+    const capped = await send('3.3.3.3') // the shared daily cap is used up
+    expect(capped.status).toBe(503)
+    expect(await capped.json()).toMatchObject({ error: { code: 'daily-limit' } })
     expect(p.calls).toHaveLength(3)
   })
 })

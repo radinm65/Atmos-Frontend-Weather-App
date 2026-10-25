@@ -4,6 +4,7 @@ import { ErrorState } from '../../components/feedback/ErrorState'
 import { LoadingState } from '../../components/feedback/LoadingState'
 import { GlassPanel } from '../../components/ui/GlassPanel'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
+import { ASSISTANT_PROVIDER_LABELS } from '../../lib/assistant/contract'
 import { ChooseLocationPrompt } from '../locations/ChooseLocationPrompt'
 import { useActiveLocation } from '../locations/useActiveLocation'
 import { WeatherQueryState } from '../weather/WeatherQueryState'
@@ -15,6 +16,7 @@ export function AssistantPage() {
   useDocumentTitle('Assistant')
   const { activeLocation } = useActiveLocation()
   const status = useAssistantStatus()
+  const providerId = status.data?.state === 'ready' ? status.data.provider : null
 
   return (
     <div className={styles.page}>
@@ -28,9 +30,9 @@ export function AssistantPage() {
 
       {status.isPending ? (
         <LoadingState label="Checking the assistant" lines={2} />
-      ) : status.data === 'not-configured' ? (
+      ) : status.data?.state === 'not-configured' ? (
         <NotConfigured />
-      ) : status.data === 'unreachable' || status.isError ? (
+      ) : status.data?.state !== 'ready' ? (
         <ErrorState
           title="Can't reach the assistant"
           message="The assistant service did not answer. The rest of Atmos still works."
@@ -39,7 +41,12 @@ export function AssistantPage() {
       ) : activeLocation ? (
         <WeatherQueryState location={activeLocation}>
           {(report, freshness) => (
-            <AssistantChat key={report.location.id} report={report} freshness={freshness} />
+            <AssistantChat
+              key={report.location.id}
+              report={report}
+              freshness={freshness}
+              providerName={providerId ? ASSISTANT_PROVIDER_LABELS[providerId] : null}
+            />
           )}
         </WeatherQueryState>
       ) : (

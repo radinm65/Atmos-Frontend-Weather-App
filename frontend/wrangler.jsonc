@@ -1,12 +1,14 @@
 {
   // Cloudflare Workers deployment (OPEN_DECISIONS D-15, candidate). NOT deployed or tested on
   // Cloudflare yet: the handler is tested in-process, and this file follows Cloudflare's
-  // documented static-assets layout. Check it with `wrangler dev` before the first deploy.
+  // documented static-assets and Workers AI layouts. Check it with `wrangler dev` before the
+  // first deploy.
   //
-  // The assistant stays off until you run, from the frontend folder:
-  //   npx wrangler secret put ANTHROPIC_API_KEY
-  // and set ASSISTANT_ENABLED to "true" below. Also set a monthly spend limit on the AI account
-  // and add Cloudflare rate limiting for /api/assistant first (OPEN_DECISIONS D-14).
+  // The assistant uses Workers AI through the AI binding below: no API key, and a free daily
+  // allowance (10,000 neurons, a few hundred questions). On the Workers FREE plan Cloudflare stops
+  // answering at the limit instead of charging, so the worst case is "back tomorrow". If you ever
+  // move this account to Workers Paid, usage above the allowance is billed: set a limit first.
+  // Switch the assistant off by setting ASSISTANT_ENABLED to "false".
   "name": "atmos",
   "main": "server/worker.ts",
   "compatibility_date": "2026-10-01",
@@ -18,7 +20,10 @@
     // Run the Worker for the API only; every other request is served straight from the assets.
     "run_worker_first": ["/api/*"],
   },
+  "ai": {
+    "binding": "AI",
+  },
   "vars": {
-    "ASSISTANT_ENABLED": "false",
+    "ASSISTANT_ENABLED": "true",
   },
 }

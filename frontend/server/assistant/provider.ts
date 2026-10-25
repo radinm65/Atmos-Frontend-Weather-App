@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
-import type { ChatMessage } from '../../src/lib/assistant/contract'
+import type { AssistantProviderId, ChatMessage } from '../../src/lib/assistant/contract'
 
 /**
  * The assistant's runtime AI provider, behind a small interface so another provider can replace
@@ -10,6 +10,8 @@ export type ProviderFailure =
   /** Could not reach the provider, it is overloaded, or it timed out. Worth trying again. */
   | 'unavailable'
   | 'rate-limited'
+  /** The free (or paid) allowance for the day or month is used up. Trying again later helps. */
+  | 'quota'
   /** The key is wrong or the account has a problem. The owner must act; never shown in detail. */
   | 'misconfigured'
   /** The provider declined to answer. */
@@ -26,6 +28,7 @@ export class ProviderError extends Error {
 }
 
 export interface AssistantProvider {
+  readonly id: AssistantProviderId
   readonly model: string
   answer(input: {
     system: string
@@ -55,6 +58,7 @@ export function createAnthropicProvider(options: {
     options.client ?? new Anthropic({ apiKey: options.apiKey, maxRetries: 1 })
 
   return {
+    id: 'anthropic',
     model,
     async answer({ system, messages, signal }) {
       let response

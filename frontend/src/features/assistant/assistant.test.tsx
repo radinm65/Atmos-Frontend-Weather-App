@@ -103,24 +103,29 @@ describe('createHttpAssistantService', () => {
   }
 
   it.each([
-    ['enabled', () => json({ enabled: true }), 'ready'],
-    ['switched off', () => json({ enabled: false }), 'not-configured'],
-    ['missing (404)', () => json({}, { status: 404 }), 'not-configured'],
+    ['enabled', () => json({ enabled: true }), { state: 'ready', provider: null }],
+    [
+      'enabled, naming its provider',
+      () => json({ enabled: true, provider: 'cloudflare' }),
+      { state: 'ready', provider: 'cloudflare' },
+    ],
+    ['switched off', () => json({ enabled: false }), { state: 'not-configured' }],
+    ['missing (404)', () => json({}, { status: 404 }), { state: 'not-configured' }],
     [
       'the app’s own HTML page',
       () => new Response('<!doctype html>', { status: 200 }),
-      'not-configured',
+      { state: 'not-configured' },
     ],
-    ['a server error', () => json({}, { status: 500 }), 'unreachable'],
-    ['an unexpected payload', () => json({ hello: 1 }), 'not-configured'],
+    ['a server error', () => json({}, { status: 500 }), { state: 'unreachable' }],
+    ['an unexpected payload', () => json({ hello: 1 }), { state: 'not-configured' }],
   ])('reads the status when the endpoint is %s', async (_name, respond, expected) => {
-    expect(await service(() => Promise.resolve(respond())).getStatus()).toBe(expected)
+    expect(await service(() => Promise.resolve(respond())).getStatus()).toEqual(expected)
   })
 
   it('reports an unreachable endpoint', async () => {
-    expect(await service(() => Promise.reject(new TypeError('offline'))).getStatus()).toBe(
-      'unreachable',
-    )
+    expect(await service(() => Promise.reject(new TypeError('offline'))).getStatus()).toEqual({
+      state: 'unreachable',
+    })
   })
 
   it('posts the request as JSON and returns the answer', async () => {

@@ -30,6 +30,8 @@ export interface AssistantChatProps {
   report: WeatherReport
   /** "How current is this forecast" label from the weather query. */
   freshness: ReactNode
+  /** Who answers, for the privacy note (for example "Cloudflare Workers AI"). */
+  providerName: string | null
 }
 
 /**
@@ -37,7 +39,7 @@ export interface AssistantChatProps {
  * starts a new one. Each question is sent with the forecast shown on the page, so answers are
  * grounded in what the person can see.
  */
-export function AssistantChat({ report, freshness }: AssistantChatProps) {
+export function AssistantChat({ report, freshness, providerName }: AssistantChatProps) {
   const units = useUnits()
   const inputId = useId()
   const [turns, setTurns] = useState<Turn[]>([])
@@ -240,8 +242,8 @@ export function AssistantChat({ report, freshness }: AssistantChatProps) {
       <p className={styles.fine}>
         AI answers can be wrong. They use only the forecast above, so check anything important with
         an official source, and for warnings or emergencies follow your local authorities. Your
-        question and this forecast are sent to our server and to the AI provider (Anthropic) to
-        write the answer. Nothing is stored.
+        question and this forecast are sent to our server and to the AI provider
+        {providerName ? ` (${providerName})` : ''} to write the answer. Nothing is stored here.
       </p>
     </GlassPanel>
   )

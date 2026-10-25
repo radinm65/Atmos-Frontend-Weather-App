@@ -54,6 +54,8 @@ export type AssistantErrorCode =
   | 'too-large'
   | 'forbidden-origin'
   | 'rate-limited'
+  /** The assistant's daily allowance (set by the site or the provider's free tier) is used up. */
+  | 'daily-limit'
   /** The AI provider is down, overloaded, or took too long. */
   | 'provider-unavailable'
   /** The provider declined to answer this request. */
@@ -69,6 +71,7 @@ export const assistantErrorSchema = z.object({
       'too-large',
       'forbidden-origin',
       'rate-limited',
+      'daily-limit',
       'provider-unavailable',
       'refused',
       'failed',
@@ -78,4 +81,16 @@ export const assistantErrorSchema = z.object({
 })
 
 export const assistantAnswerSchema = z.object({ answer: z.string().min(1) })
-export const assistantStatusSchema = z.object({ enabled: z.boolean() })
+export const ASSISTANT_PROVIDER_IDS = ['cloudflare', 'anthropic'] as const
+export type AssistantProviderId = (typeof ASSISTANT_PROVIDER_IDS)[number]
+
+/** Names shown to people, so the page can say who receives their question. */
+export const ASSISTANT_PROVIDER_LABELS: Record<AssistantProviderId, string> = {
+  cloudflare: 'Cloudflare Workers AI',
+  anthropic: 'Anthropic',
+}
+
+export const assistantStatusSchema = z.object({
+  enabled: z.boolean(),
+  provider: z.enum(ASSISTANT_PROVIDER_IDS).optional(),
+})

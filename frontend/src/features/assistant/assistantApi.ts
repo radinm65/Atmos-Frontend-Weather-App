@@ -4,7 +4,11 @@ import {
   assistantErrorSchema,
   assistantStatusSchema,
 } from '../../lib/assistant/contract'
-import type { AssistantErrorCode, AssistantRequest } from '../../lib/assistant/contract'
+import type {
+  AssistantErrorCode,
+  AssistantProviderId,
+  AssistantRequest,
+} from '../../lib/assistant/contract'
 
 /**
  * How the browser talks to the assistant endpoint. The key is never here: the endpoint holds it.
@@ -12,12 +16,12 @@ import type { AssistantErrorCode, AssistantRequest } from '../../lib/assistant/c
  */
 
 export type AssistantStatus =
-  /** The endpoint exists and is switched on. */
-  | 'ready'
+  /** The endpoint exists and is switched on; `provider` says who answers (when it says). */
+  | { state: 'ready'; provider: AssistantProviderId | null }
   /** There is no assistant on this site: the endpoint is missing or says it is off. */
-  | 'not-configured'
+  | { state: 'not-configured' }
   /** The endpoint could not be reached to find out. */
-  | 'unreachable'
+  | { state: 'unreachable' }
 
 export interface AssistantService {
   getStatus(signal?: AbortSignal): Promise<AssistantStatus>
@@ -50,16 +54,18 @@ export function createHttpAssistantService(
         response = await doFetch(endpoint, { signal })
       } catch (error) {
         if (signal?.aborted) throw error
-        return 'unreachable'
+        return { state: 'unreachable' }
       }
       // A static site answers with 404 or with the app's own HTML page: there is no assistant.
-      if (response.status === 404 || response.status === 405) return 'not-configured'
-      if (!response.ok) return 'unreachable'
+      if (response.status === 404 || response.status === 405) return { state: 'not-configured' }
+      if (!response.ok) return { state: 'unreachable' }
       try {
         const status = assistantStatusSchema.safeParse(await response.json())
-        return status.success && status.data.enabled ? 'ready' : 'not-configured'
+        return status.success && status.data.enabled
+          ? { state: 'ready', provider: status.data.provider ?? null }
+          : { state: 'not-configured' }
       } catch {
-        return 'not-configured'
+        return { state: 'not-configured' }
       }
     },
 
@@ -101,6 +107,14 @@ export function createHttpAssistantService(
   }
 }
 
+/** "30 seconds", "5 minutes", "3 hours". */
+function describeWait(seconds: number): string {
+  if (seconds < 90) return `${seconds} seconds`
+  const minutes = Math.round(seconds / 60)
+  if (minutes < 90) return `${minutes} minutes`
+  return `${Math.round(minutes / 60)} hours`
+}
+
 /** What to tell the person, and whether asking again could help. */
 export function describeAssistantError(error: unknown): { message: string; retryable: boolean } {
   if (error instanceof AssistantError) {
@@ -110,10 +124,13 @@ export function describeAssistantError(error: unknown): { message: string; retry
       case 'rate-limited':
         return {
           message: error.retryAfterSeconds
-            ? `Too many questions. Try again in about ${error.retryAfterSeconds} seconds.`
+            ? `Too many questions. Try again in about ${describeWait(error.retryAfterSeconds)}.`
             : error.message,
           retryable: true,
         }
+      case 'daily-limit':
+        // Asking again soon cannot help: the allowance comes back tomorrow.
+        return { message: error.message, retryable: false }
       case 'provider-unavailable':
       case 'failed':
         return { message: error.message, retryable: true }

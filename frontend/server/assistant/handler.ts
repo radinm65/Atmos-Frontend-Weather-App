@@ -1,10 +1,12 @@
 import { ASSISTANT_LIMITS, assistantRequestSchema } from '../../src/lib/assistant/contract'
-import type { AssistantErrorCode } from '../../src/lib/assistant/contract'
+import type { AssistantErrorCode, AssistantProviderId } from '../../src/lib/assistant/contract'
 import { buildSystemPrompt } from './prompt'
 import { ProviderError, createAnthropicProvider } from './provider'
 import type { AssistantProvider } from './provider'
 import { createMemoryRateLimiter } from './rateLimit'
 import type { RateLimiter } from './rateLimit'
+import { bindingRunner, createWorkersAiProvider, restRunner } from './workersAi'
+import type { AiBinding } from './workersAi'
 
 /**
  * The assistant endpoint as a plain `Request` to `Response` function, so the same code runs in
@@ -15,8 +17,15 @@ import type { RateLimiter } from './rateLimit'
 export interface AssistantEnv {
   /** Master switch. The assistant stays off unless this is exactly "true". */
   ASSISTANT_ENABLED?: string
+  /** Which provider to use when both are set up: "cloudflare" (free tier) or "anthropic". */
+  ASSISTANT_PROVIDER?: string
+  /** Cloudflare Workers AI inside a Worker: the AI binding, which needs no key. */
+  AI?: AiBinding
+  /** Cloudflare Workers AI over REST (local development, or a host other than Cloudflare). */
+  CLOUDFLARE_ACCOUNT_ID?: string
+  CLOUDFLARE_API_TOKEN?: string
   ANTHROPIC_API_KEY?: string
-  /** Defaults to Claude Haiku 5.5. */
+  /** Overrides the default model of whichever provider is used. */
   ASSISTANT_MODEL?: string
   /** Comma-separated extra origins allowed to call the endpoint. The site's own origin always is. */
   ASSISTANT_ALLOWED_ORIGINS?: string
@@ -43,6 +52,7 @@ const MESSAGES: Record<AssistantErrorCode, string> = {
   'too-large': 'That request was too large.',
   'forbidden-origin': 'This site is not allowed to use the assistant.',
   'rate-limited': 'Too many questions in a short time. Please wait a moment and try again.',
+  'daily-limit': 'The assistant has reached its daily limit. Please try again tomorrow.',
   'provider-unavailable': 'The assistant is unavailable right now. Please try again in a moment.',
   refused: 'The assistant could not answer that question.',
   failed: 'Something went wrong while answering. Please try again.',
@@ -54,6 +64,7 @@ const STATUS: Record<AssistantErrorCode, number> = {
   'too-large': 413,
   'forbidden-origin': 403,
   'rate-limited': 429,
+  'daily-limit': 503,
   'provider-unavailable': 503,
   refused: 422,
   failed: 502,
@@ -74,8 +85,21 @@ function fail(code: AssistantErrorCode, headers: Record<string, string> = {}): R
   return json({ error: { code, message: MESSAGES[code] } }, STATUS[code], headers)
 }
 
+/** The provider that would answer, or 
+ull when none is set up. The free one wins by default. */
+export function resolveProviderId(env: AssistantEnv): AssistantProviderId | null {
+  const cloudflare =
+    Boolean(env.AI) ||
+    Boolean(env.CLOUDFLARE_ACCOUNT_ID?.trim() && env.CLOUDFLARE_API_TOKEN?.trim())
+  const anthropic = Boolean(env.ANTHROPIC_API_KEY?.trim())
+  const wanted = env.ASSISTANT_PROVIDER?.trim()
+  if (wanted === 'anthropic') return anthropic ? 'anthropic' : null
+  if (wanted === 'cloudflare') return cloudflare ? 'cloudflare' : null
+  return cloudflare ? 'cloudflare' : anthropic ? 'anthropic' : null
+}
+
 export function isAssistantEnabled(env: AssistantEnv): boolean {
-  return env.ASSISTANT_ENABLED?.trim() === 'true' && Boolean(env.ANTHROPIC_API_KEY?.trim())
+  return env.ASSISTANT_ENABLED?.trim() === 'true' && resolveProviderId(env) !== null
 }
 
 function positiveInt(value: string | undefined, fallback: number): number {
@@ -104,8 +128,23 @@ export function resetAssistantLimiters(): void {
 }
 
 function defaultProvider(env: AssistantEnv): AssistantProvider | null {
-  const apiKey = env.ANTHROPIC_API_KEY?.trim()
-  return apiKey ? createAnthropicProvider({ apiKey, model: env.ASSISTANT_MODEL }) : null
+  const id = resolveProviderId(env)
+  if (id === 'anthropic') {
+    return createAnthropicProvider({
+      apiKey: env.ANTHROPIC_API_KEY?.trim() ?? '',
+      model: env.ASSISTANT_MODEL,
+    })
+  }
+  if (id === 'cloudflare') {
+    const run = env.AI
+      ? bindingRunner(env.AI)
+      : restRunner({
+          accountId: env.CLOUDFLARE_ACCOUNT_ID?.trim() ?? '',
+          apiToken: env.CLOUDFLARE_API_TOKEN?.trim() ?? '',
+        })
+    return createWorkersAiProvider({ run, model: env.ASSISTANT_MODEL })
+  }
+  return null
 }
 
 /**
@@ -144,7 +183,8 @@ export async function handleAssistantRequest(
 
   if (method === 'GET') {
     // Lets the page say honestly whether the assistant exists, without exposing any setting.
-    return json({ enabled: isAssistantEnabled(env) })
+    const enabled = isAssistantEnabled(env)
+    return json(enabled ? { enabled, provider: resolveProviderId(env) } : { enabled })
   }
   if (method !== 'POST')
     return json({ error: { code: 'invalid-request', message: 'Method not allowed' } }, 405, {
@@ -164,7 +204,7 @@ export async function handleAssistantRequest(
     return fail('rate-limited', { 'retry-after': String(client.retryAfterSeconds) })
   const everyone = (deps.globalLimiter ?? limiters.global).check('all', now)
   if (!everyone.allowed)
-    return fail('rate-limited', { 'retry-after': String(everyone.retryAfterSeconds) })
+    return fail('daily-limit', { 'retry-after': String(everyone.retryAfterSeconds) })
 
   let raw: string
   try {
@@ -201,6 +241,8 @@ export async function handleAssistantRequest(
     switch (failure) {
       case 'refused':
         return fail('refused')
+      case 'quota':
+        return fail('daily-limit')
       case 'unavailable':
       case 'rate-limited':
       case 'misconfigured':

@@ -3,18 +3,6 @@
   gap: var(--space-5);
 }
 
-.heading {
-  font-size: var(--text-2xl);
-  letter-spacing: -0.02em;
-}
-
-.intro {
-  max-width: 60ch;
-  margin-top: var(--space-2);
-  color: var(--color-text-muted);
-  font-size: var(--text-lg);
-}
-
 .off {
   display: grid;
   justify-items: center;

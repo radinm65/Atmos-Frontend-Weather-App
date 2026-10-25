@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react'
+import { PageHeader } from '../../components/layout/PageHeader'
 import { StaggerGroup } from '../../components/motion/StaggerGroup'
 import { GlassPanel } from '../../components/ui/GlassPanel'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
@@ -23,13 +24,10 @@ export function ComparePage() {
 
   return (
     <div className={styles.page}>
-      <div>
-        <h1 className={styles.heading}>Compare</h1>
-        <p className={styles.intro}>
-          Weather for up to four cities side by side, in your chosen units. Each city shows its own
-          local time.
-        </p>
-      </div>
+      <PageHeader
+        title="Compare"
+        description="Weather for up to four cities side by side, in your chosen units. Each city shows its own local time."
+      />
 
       <AddCities />
 

@@ -3,11 +3,6 @@
   gap: var(--space-5);
 }
 
-.heading {
-  font-size: var(--text-2xl);
-  letter-spacing: -0.02em;
-}
-
 .search {
   display: grid;
   gap: var(--space-3);

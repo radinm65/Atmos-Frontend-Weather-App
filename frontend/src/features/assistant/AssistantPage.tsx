@@ -1,6 +1,7 @@
 import { Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ErrorState } from '../../components/feedback/ErrorState'
+import { PageHeader } from '../../components/layout/PageHeader'
 import { LoadingState } from '../../components/feedback/LoadingState'
 import { GlassPanel } from '../../components/ui/GlassPanel'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
@@ -20,13 +21,10 @@ export function AssistantPage() {
 
   return (
     <div className={styles.page}>
-      <div>
-        <h1 className={styles.heading}>Assistant</h1>
-        <p className={styles.intro}>
-          Ask plain-language questions about the weather for your selected city. Answers come from
-          the forecast on screen, not from guesses.
-        </p>
-      </div>
+      <PageHeader
+        title="Assistant"
+        description="Ask plain-language questions about the weather for your selected city. Answers come from the forecast on screen, not from guesses."
+      />
 
       {status.isPending ? (
         <LoadingState label="Checking the assistant" lines={2} />

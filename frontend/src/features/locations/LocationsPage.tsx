@@ -1,5 +1,6 @@
 import { Bookmark } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { PageHeader } from '../../components/layout/PageHeader'
 import { StaggerGroup } from '../../components/motion/StaggerGroup'
 import { GlassPanel } from '../../components/ui/GlassPanel'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
@@ -24,7 +25,10 @@ export function LocationsPage() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.heading}>Locations</h1>
+      <PageHeader
+        title="Locations"
+        description="Your saved places, each with its current weather."
+      />
 
       <GlassPanel
         as="section"

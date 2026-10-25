@@ -9,6 +9,8 @@
 }
 
 .header {
+  /* Same offset as every page title banner, so the title clears the header's shade. */
+  margin-top: var(--space-4);
   display: flex;
   flex-wrap: wrap;
   align-items: center;

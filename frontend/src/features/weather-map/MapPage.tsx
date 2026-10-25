@@ -1,6 +1,7 @@
 import { Crosshair } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { PageHeader } from '../../components/layout/PageHeader'
 import { Button } from '../../components/ui/Button'
 import { GlassPanel } from '../../components/ui/GlassPanel'
 import type { Location } from '../../domain/location'
@@ -99,7 +100,10 @@ export function MapPage() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.heading}>Map</h1>
+      <PageHeader
+        title="Map"
+        description="Pan and zoom, tap a place for its weather, and watch rain move on the radar."
+      />
 
       <GlassPanel
         as="section"
